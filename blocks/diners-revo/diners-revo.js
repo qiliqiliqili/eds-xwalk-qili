@@ -53,10 +53,10 @@ async function loadScripts() {
     'matchHeight_set.js',
     'modify.js',
   ];
-  for (const s of scripts) {
-    // eslint-disable-next-line no-await-in-loop
-    await loadScript(`${BLOCK_PATH}/assets/${s}`);
-  }
+  await scripts.reduce(
+    (promise, s) => promise.then(() => loadScript(`${BLOCK_PATH}/assets/${s}`)),
+    Promise.resolve(),
+  );
 }
 
 export default async function decorate(block) {
