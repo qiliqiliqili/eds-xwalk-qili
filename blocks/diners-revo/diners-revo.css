@@ -1,0 +1,17 @@
+/* Diners Club Revolving Payment - Static Content Block */
+/* Scoped styles to isolate from EDS page styles */
+
+.diners-revo-content {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Reset EDS default styles within block */
+.diners-revo-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.diners-revo-content a {
+  text-decoration: none;
+}
