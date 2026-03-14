@@ -77,18 +77,21 @@ export default async function decorate(block) {
   const doc = parser.parseFromString(html, 'text/html');
 
   // Rewrite asset paths to be absolute from block path
-  doc.querySelectorAll('[src]').forEach((el) => {
-    const src = el.getAttribute('src');
-    if (src && src.startsWith('./assets/')) {
-      el.setAttribute('src', `${BLOCK_PATH}/assets/${src.slice('./assets/'.length)}`);
+  const FILE_PREFIX = './リボルビング払い _ お支払い _ クレジットカードのダイナースクラブ_files/';
+  const ASSETS_PREFIX = './assets/';
+
+  function rewriteAttr(el, attr) {
+    const val = el.getAttribute(attr);
+    if (!val) return;
+    if (val.startsWith(FILE_PREFIX)) {
+      el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice(FILE_PREFIX.length)}`);
+    } else if (val.startsWith(ASSETS_PREFIX)) {
+      el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice(ASSETS_PREFIX.length)}`);
     }
-  });
-  doc.querySelectorAll('[href]').forEach((el) => {
-    const href = el.getAttribute('href');
-    if (href && href.startsWith('./assets/')) {
-      el.setAttribute('href', `${BLOCK_PATH}/assets/${href.slice('./assets/'.length)}`);
-    }
-  });
+  }
+
+  doc.querySelectorAll('[src]').forEach((el) => rewriteAttr(el, 'src'));
+  doc.querySelectorAll('[href]').forEach((el) => rewriteAttr(el, 'href'));
 
   // Inject body content into block
   const wrapper = document.createElement('div');
