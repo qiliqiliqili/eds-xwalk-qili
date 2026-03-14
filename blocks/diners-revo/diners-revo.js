@@ -76,17 +76,20 @@ export default async function decorate(block) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
-  // Rewrite asset paths to be absolute from block path
-  const FILE_PREFIX = './リボルビング払い _ お支払い _ クレジットカードのダイナースクラブ_files/';
-  const ASSETS_PREFIX = './assets/';
+  // Rewrite asset paths to be absolute from block path.
+  // content.html uses NFD Unicode in the directory prefix (e.g. "_files/"),
+  // so match by the stable "_files/" suffix instead of the full NFD prefix.
+  const FILES_MARKER = '_files/';
 
   function rewriteAttr(el, attr) {
     const val = el.getAttribute(attr);
     if (!val) return;
-    if (val.startsWith(FILE_PREFIX)) {
-      el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice(FILE_PREFIX.length)}`);
-    } else if (val.startsWith(ASSETS_PREFIX)) {
-      el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice(ASSETS_PREFIX.length)}`);
+    const filesIdx = val.indexOf(FILES_MARKER);
+    if (filesIdx !== -1) {
+      // e.g. "./リボ..._files/logo.png" → "/blocks/diners-revo/assets/logo.png"
+      el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice(filesIdx + FILES_MARKER.length)}`);
+    } else if (val.startsWith('./assets/')) {
+      el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice('./assets/'.length)}`);
     }
   }
 
