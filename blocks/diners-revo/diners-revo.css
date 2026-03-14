@@ -7,12 +7,27 @@
   overflow-x: hidden;
 }
 
-/* Reset EDS default styles within block */
+/* Reset EDS img override: restore HTML width/height attributes.
+   EDS sets "main img { width: auto }" which ignores the HTML width attribute. */
 .diners-revo-content img {
   max-width: 100%;
-  height: auto;
+  width: revert;
+  height: revert;
 }
 
-.diners-revo-content a {
-  text-decoration: none;
+/* Reset EDS button styles that override the original Diners component buttons.
+   EDS applies border-radius, background-color, padding, etc. to all <button>. */
+.diners-revo-content button {
+  all: revert;
+}
+
+/* Reset EDS link styles */
+.diners-revo-content a:any-link {
+  color: revert;
+  text-decoration: revert;
+}
+
+.diners-revo-content a:hover {
+  color: revert;
+  text-decoration: revert;
 }
