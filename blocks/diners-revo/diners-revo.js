@@ -103,7 +103,8 @@ export default async function decorate(block) {
   block.replaceChildren(wrapper);
 
   // Initialize AEM accordion (data-cmp-is="accordion").
-  // CSS: .AES-acd .cmp-accordion__item[data-cmp-expanded=''] .cmp-accordion__panel { display:block }
+  // CSS: .AES-acd .cmp-accordion__item[data-cmp-expanded=''] 
+  // .cmp-accordion__panel { display:block }
   // Toggle data-cmp-expanded="" on the item and is-active on the header.
   wrapper.querySelectorAll('[data-cmp-is="accordion"]').forEach((accordion) => {
     accordion.querySelectorAll('[data-cmp-hook-accordion="button"]').forEach((button) => {
