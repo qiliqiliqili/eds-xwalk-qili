@@ -96,6 +96,14 @@ export default async function decorate(block) {
   doc.querySelectorAll('[src]').forEach((el) => rewriteAttr(el, 'src'));
   doc.querySelectorAll('[href]').forEach((el) => rewriteAttr(el, 'href'));
 
+  // Preserve explicit width attributes as inline styles before injecting.
+  // EDS "main img { width: auto }" overrides HTML width attributes via CSS,
+  // but inline styles take precedence over all author stylesheets.
+  doc.querySelectorAll('img[width]').forEach((img) => {
+    const w = parseInt(img.getAttribute('width'), 10);
+    if (!Number.isNaN(w)) img.style.width = `${w}px`;
+  });
+
   // Inject body content into block
   const wrapper = document.createElement('div');
   wrapper.className = 'diners-revo-content';
