@@ -102,6 +102,27 @@ export default async function decorate(block) {
   wrapper.innerHTML = doc.body.innerHTML;
   block.replaceChildren(wrapper);
 
+  // Initialize AEM accordion (data-cmp-is="accordion").
+  // CSS rule: .AES-acd .cmp-accordion__item[data-cmp-expanded=''] .cmp-accordion__panel { display:block }
+  // So we toggle data-cmp-expanded="" on the item and is-active on the header.
+  wrapper.querySelectorAll('[data-cmp-is="accordion"]').forEach((accordion) => {
+    accordion.querySelectorAll('[data-cmp-hook-accordion="button"]').forEach((button) => {
+      const item = button.closest('[data-cmp-hook-accordion="item"]');
+      const header = button.closest('.cmp-accordion__header');
+      if (!item) return;
+      button.addEventListener('click', () => {
+        const isExpanded = item.hasAttribute('data-cmp-expanded');
+        if (isExpanded) {
+          item.removeAttribute('data-cmp-expanded');
+          header?.classList.remove('is-active');
+        } else {
+          item.setAttribute('data-cmp-expanded', '');
+          header?.classList.add('is-active');
+        }
+      });
+    });
+  });
+
   // Load functional scripts after content is in DOM
   await loadScripts();
 }
