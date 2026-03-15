@@ -1,0 +1,343 @@
+/*
+ * magazine.css
+ * ─────────────
+ * Layout and typographic styles for Diners Club Japan magazine article pages.
+ * Loaded for magazine article page templates.
+ *
+ * Design values
+ * ─────────────
+ *   Diners blue  : #004C97
+ *   Gold accent  : #b7996c
+ *   Dark text    : #263033
+ *   Content col  : max 680px, offset to the right of centre on desktop
+ *                  (mirrors original 6/12 col + 4/12 offset in a 12-col grid)
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   Shared content-column utility
+   ─────────────────────────────
+   Used across article-header, article-body and info-box to keep
+   text within ~680 px and pushed right-of-centre on desktop.
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-article-header .default-content-wrapper,
+.section.magazine-article-body   .default-content-wrapper,
+.section.magazine-info-box       .default-content-wrapper {
+  max-width: 680px;
+}
+
+@media (width >= 900px) {
+  .section.magazine-article-header .default-content-wrapper,
+  .section.magazine-article-body   .default-content-wrapper,
+  .section.magazine-info-box       .default-content-wrapper {
+    /* 4/12 cols offset = ~33.33 % of the 1200px content area */
+    margin-left: min(33.33%, calc(1200px * 0.3333));
+    margin-right: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   1.  Article header section
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-article-header {
+  padding: 3rem 1rem 2rem;
+}
+
+@media (width >= 900px) {
+  .section.magazine-article-header {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 4rem 2rem 2.5rem;
+  }
+}
+
+/* Left gold accent bar wrapping the full text block */
+.section.magazine-article-header .default-content-wrapper {
+  border-left: 6px solid #b7996c;
+  padding-left: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+}
+
+/* Category label — first paragraph */
+.section.magazine-article-header p:first-child {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Gold italic sub-heading (em / i elements) */
+.section.magazine-article-header em,
+.section.magazine-article-header i {
+  font-family: 'Georgia', 'Noto Serif JP', serif;
+  font-style: italic;
+  color: #b7996c;
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+/* H1 – main article title */
+.section.magazine-article-header h1 {
+  font-family: 'Noto Serif JP', 'Georgia', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #263033;
+  margin: 0.25rem 0 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+/* Author credits + lead text paragraphs after H1 */
+.section.magazine-article-header p + p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+/* Lead / introductory paragraph (bold or first after H1) */
+.section.magazine-article-header h1 + p {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+/* Small note / disclaimer text (strong or last paragraph) */
+.section.magazine-article-header p:last-child:not(:first-child) {
+  font-size: 12px;
+  color: #999;
+  margin-top: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2.  Article body section
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-article-body {
+  padding: 1rem 1rem 2rem;
+}
+
+@media (width >= 900px) {
+  .section.magazine-article-body {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 1.5rem 2rem 3rem;
+  }
+}
+
+/* Body text */
+.section.magazine-article-body p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #333;
+  margin-bottom: 1.5em;
+}
+
+/* Images — stretch to full content column width */
+.section.magazine-article-body img,
+.section.magazine-article-body picture {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Image captions — paragraph immediately following a picture/img */
+.section.magazine-article-body picture + p,
+.section.magazine-article-body img + p,
+.section.magazine-article-body .caption {
+  font-size: 12px;
+  color: #888;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  line-height: 1.6;
+}
+
+/* Body section headings */
+.section.magazine-article-body h2 {
+  font-family: 'Noto Serif JP', 'Georgia', serif;
+  font-size: 1.5rem;
+  color: #263033;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section.magazine-article-body h3 {
+  font-size: 1.15rem;
+  color: #263033;
+  margin: 2rem 0 0.75rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3.  Info box section
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-info-box {
+  padding: 1rem 1rem 2rem;
+}
+
+@media (width >= 900px) {
+  .section.magazine-info-box {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 1rem 2rem 3rem;
+  }
+}
+
+/* Inner bordered box */
+.section.magazine-info-box .info-box-inner,
+.section.magazine-info-box .default-content-wrapper {
+  border: 1px solid #ddd;
+  padding: 2rem;
+  background: #fff;
+}
+
+.section.magazine-info-box hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.section.magazine-info-box h2,
+.section.magazine-info-box h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #004c97;
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.section.magazine-info-box p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 0.75em;
+}
+
+.section.magazine-info-box a {
+  color: #004c97;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4.  Recommends section
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-recommends {
+  padding: 3rem 1rem;
+  background: #f7f7f7;
+}
+
+@media (width >= 900px) {
+  .section.magazine-recommends {
+    padding: 3rem 2rem;
+  }
+
+  .section.magazine-recommends .default-content-wrapper {
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+}
+
+.section.magazine-recommends h2 {
+  font-family: 'Noto Serif JP', 'Georgia', serif;
+  font-size: 2rem;
+  color: #263033;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5.  Breadcrumb section
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-breadcrumb {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #eee;
+}
+
+@media (width >= 900px) {
+  .section.magazine-breadcrumb {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 0.75rem 2rem;
+  }
+}
+
+.section.magazine-breadcrumb ol,
+.section.magazine-breadcrumb ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.section.magazine-breadcrumb li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Separator ">" between items */
+.section.magazine-breadcrumb li:not(:last-child)::after {
+  content: '›';
+  color: #bbb;
+  font-size: 14px;
+}
+
+.section.magazine-breadcrumb a {
+  color: #888;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.section.magazine-breadcrumb a:hover {
+  color: #004c97;
+}
+
+.section.magazine-breadcrumb li:last-child {
+  color: #555;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6.  High Value Payment promo section
+       (uses .columns.promo block — styles in columns.css,
+        section-level overrides here)
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-promo {
+  padding: 2rem 1rem;
+}
+
+@media (width >= 900px) {
+  .section.magazine-promo {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 2rem;
+  }
+
+  .section.magazine-promo .default-content-wrapper {
+    max-width: 680px;
+    margin-left: min(33.33%, calc(1200px * 0.3333));
+    margin-right: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7.  SNS share section
+   ═══════════════════════════════════════════════════════════════ */
+.section.magazine-sns {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+@media (width >= 900px) {
+  .section.magazine-sns .default-content-wrapper {
+    max-width: 680px;
+    margin-left: min(33.33%, calc(1200px * 0.3333));
+    margin-right: auto;
+  }
+}

@@ -1,0 +1,407 @@
+/*
+ * diners-magazine-header styles
+ * ─────────────────────────────
+ * Prefix: dmh-
+ *
+ * 3-row structure matching the original diners.co.jp header:
+ *
+ *  .dmh-wrapper (fixed)
+ *    .dmh-top-bar          ← Row 1: logo | utility nav | hamburger (h=72px)
+ *    .dmh-nav-bar          ← Row 2: main navigation (white bg, separate row)
+ *      .dmh-nav-main
+ *        .dmh-nav-list
+ *          li.dmh-nav-drop → .dmh-dropdown
+ *    .dmh-sub-nav          ← Row 3: SIGNATURE icon + category tabs (white bg)
+ *      .dmh-sub-nav-list
+ *        li.dmh-sub-nav-logo-item → SIGNATURE img
+ */
+
+/* ─── Reset scope ─────────────────────────────────────────────── */
+.dmh-wrapper *,
+.dmh-wrapper *::before,
+.dmh-wrapper *::after {
+  box-sizing: border-box;
+}
+
+/* ─── Outer wrapper (fixed) ───────────────────────────────────── */
+.dmh-wrapper {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 900;
+  background: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ROW 1 — Top bar: logo | utility nav | hamburger
+   ═══════════════════════════════════════════════════════════════ */
+.dmh-top-bar {
+  display: flex;
+  align-items: center;
+  height: 72px;
+  padding: 0 30px;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ─── Logo ────────────────────────────────────────────────────── */
+.dmh-logo {
+  flex-shrink: 0;
+}
+
+.dmh-logo a {
+  display: block;
+  line-height: 0;
+}
+
+.dmh-logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+/* ─── Utility navigation (top-right, desktop only) ────────────── */
+.dmh-utility-nav {
+  display: none; /* hidden on mobile */
+  margin-left: auto;
+}
+
+.dmh-utility-list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0.8rem 0;
+  letter-spacing: -0.04em;
+}
+
+.dmh-utility-list li {
+  display: inline-block;
+  letter-spacing: normal;
+  vertical-align: middle;
+}
+
+.dmh-utility-link {
+  display: block;
+  padding: 6px 12px;
+  color: #263033;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.dmh-utility-link:hover,
+.dmh-utility-link:focus-visible {
+  opacity: 0.7;
+  outline: none;
+}
+
+/* Primary variant: 入会お申し込み / クラブ・オンライン */
+.dmh-utility-link--primary {
+  border: 1px solid #004c97;
+  color: #004c97;
+  font-weight: 600;
+  border-radius: 2px;
+  padding: 5px 14px;
+  margin-left: 8px;
+}
+
+.dmh-utility-link--primary:hover,
+.dmh-utility-link--primary:focus-visible {
+  background: #004c97;
+  color: #fff;
+  opacity: 1;
+}
+
+/* ─── Hamburger button ────────────────────────────────────────── */
+.dmh-hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: auto; /* push to right on mobile */
+  z-index: 1;
+}
+
+.dmh-hamburger-btn .dmh-bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #263033;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.dmh-hamburger-btn[aria-expanded='true'] .dmh-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.dmh-hamburger-btn[aria-expanded='true'] .dmh-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.dmh-hamburger-btn[aria-expanded='true'] .dmh-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ROW 2 — Nav bar: main navigation (white background, separate row)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Mobile: slide-down panel, hidden by default */
+.dmh-nav-bar {
+  background: #fff;
+  border-top: 1px solid #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.dmh-nav-bar[aria-hidden='false'] {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* ─── navMain inside navBar ───────────────────────────────────── */
+.dmh-nav-main {
+  /* Always visible inside navBar — navBar itself controls visibility */
+  display: block;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.dmh-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile: vertical stacked items */
+.dmh-nav-list > li {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dmh-nav-link {
+  display: block;
+  padding: 14px 24px;
+  color: #263033;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.dmh-nav-link:hover,
+.dmh-nav-link:focus-visible {
+  color: #002554;
+  background: #f5f8ff;
+  outline: none;
+}
+
+/* ─── Dropdown panel ──────────────────────────────────────────── */
+.dmh-dropdown {
+  background: #fff;
+  border-top: 2px solid #004c97;
+  padding: 8px 0;
+}
+
+.dmh-dropdown[hidden] {
+  display: none;
+}
+
+.dmh-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dmh-dropdown ul li a {
+  display: block;
+  padding: 10px 32px;
+  color: #444;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dmh-dropdown ul li a:hover,
+.dmh-dropdown ul li a:focus-visible {
+  background: #f0f4fb;
+  color: #004c97;
+  outline: none;
+}
+
+/* Drop indicator for items with sub-menu */
+.dmh-nav-drop > .dmh-nav-link::after {
+  content: ' ▾';
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ROW 3 — Sub-navigation: SIGNATURE icon + category tabs
+   White background (#fff), matches signature.css override
+   ═══════════════════════════════════════════════════════════════ */
+.dmh-sub-nav {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.dmh-sub-nav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0 16px;
+  height: 50px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.dmh-sub-nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* SIGNATURE logo item */
+.dmh-sub-nav-logo-item {
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.dmh-sub-nav-logo-item a {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.dmh-sub-nav-logo-item img {
+  height: 22px;
+  width: auto;
+}
+
+/* Category tab items */
+.dmh-sub-nav-list li {
+  flex-shrink: 0;
+}
+
+.dmh-sub-nav-list a {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 14px;
+  color: #263033;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.dmh-sub-nav-list a:hover,
+.dmh-sub-nav-list a:focus-visible {
+  color: #002554;
+  border-bottom-color: #4d6687;
+  outline: none;
+}
+
+/* Active category tab */
+.dmh-sub-nav-list a.dmh-sub-nav-active {
+  color: #002554;
+  border-bottom-color: #002554;
+  font-weight: 700;
+}
+
+/* ─── Desktop overrides (≥ 900px) ────────────────────────────── */
+@media (width >= 900px) {
+  /* Show utility nav */
+  .dmh-utility-nav {
+    display: block;
+  }
+
+  /* Hide hamburger */
+  .dmh-hamburger-btn {
+    display: none;
+  }
+
+  /* Nav bar: always visible, horizontal layout */
+  .dmh-nav-bar {
+    max-height: none;
+    overflow: visible;
+    border-top: none;
+  }
+
+  .dmh-nav-bar[aria-hidden='true'],
+  .dmh-nav-bar[aria-hidden='false'] {
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Center the nav content */
+  .dmh-nav-main {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+
+  .dmh-nav-list {
+    display: flex;
+    align-items: center;
+    height: 50px;
+  }
+
+  .dmh-nav-list > li {
+    border-bottom: none;
+    position: relative;
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  .dmh-nav-link {
+    padding: 0 14px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  /* Desktop dropdown: absolute positioned below nav item */
+  .dmh-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    border: 1px solid #e0e0e0;
+    border-top: 2px solid #004c97;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    z-index: 200;
+  }
+
+  /* Sub-nav: centered content */
+  .dmh-sub-nav-list {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+
+  .dmh-sub-nav-list a {
+    font-size: 13px;
+  }
+}
+
+/* ─── Body offset so content is not hidden under the fixed header ─ */
+body {
+  padding-top: var(--dmh-height, 175px);
+}

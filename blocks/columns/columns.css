@@ -31,3 +31,47 @@
     order: unset;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Promo variant
+   ─────────────────────────────────────────────────────────────
+   Used for High Value Payment style promo blocks that feature a
+   small image on the left and text + CTA button on the right.
+   ───────────────────────────────────────────────────────────── */
+.columns.promo > div {
+  border: 1px solid #ddd;
+  padding: 24px;
+  background: #fff;
+}
+
+.columns.promo .columns-img-col img {
+  width: 100%;
+  object-fit: cover;
+}
+
+@media (width >= 900px) {
+  .columns.promo > div > .columns-img-col {
+    flex: 0 0 200px;
+  }
+
+  .columns.promo > div > div:not(.columns-img-col) {
+    flex: 1;
+  }
+}
+
+.columns.promo .button-container a {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 24px;
+  background: #fff;
+  border: 1px solid #004c97;
+  color: #004c97;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.columns.promo .button-container a:hover {
+  background: #004c97;
+  color: #fff;
+}

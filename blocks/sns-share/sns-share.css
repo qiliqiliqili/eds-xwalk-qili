@@ -1,0 +1,68 @@
+/*
+ * sns-share block styles
+ * ──────────────────────
+ * Renders three circular share buttons (X, Facebook, LINE) in a
+ * centred row.
+ */
+
+/* ─── Container ───────────────────────────────────────────────── */
+.sns-share {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* ─── Button list ─────────────────────────────────────────────── */
+.sns-share-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Individual buttons ──────────────────────────────────────── */
+.sns-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--sns-color, #333);
+  color: #fff;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 0;
+  line-height: 0;
+}
+
+.sns-share-btn:hover {
+  opacity: 0.8;
+  transform: scale(1.08);
+}
+
+.sns-share-btn:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+  opacity: 0.85;
+}
+
+/* ─── Platform-specific colours ───────────────────────────────── */
+
+/* X / Twitter – black */
+.sns-share-x {
+  background: #000;
+}
+
+/* Facebook – brand blue */
+.sns-share-facebook {
+  background: #1877f2;
+}
+
+/* LINE – brand green */
+.sns-share-line {
+  background: #06c755;
+}
