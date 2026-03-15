@@ -72,8 +72,8 @@ const ICONS = {
 function openPopup(url, name) {
   const w = 550;
   const h = 450;
-  const left = Math.round((screen.width - w) / 2);
-  const top = Math.round((screen.height - h) / 2);
+  const left = Math.round((window.screen.width - w) / 2);
+  const top = Math.round((window.screen.height - h) / 2);
   window.open(
     url,
     name,
@@ -83,9 +83,12 @@ function openPopup(url, name) {
 
 /**
  * Build a single share button element.
- * @param {{ platform: string, label: string, color: string, icon: string, getUrl: () => string }} config
+ * @param {{ platform: string, label: string, color: string,
+ *   icon: string, getUrl: () => string }} config
  */
-function buildShareBtn({ platform, label, color, icon, getUrl }) {
+function buildShareBtn({
+  platform, label, color, icon, getUrl,
+}) {
   const li = document.createElement('li');
 
   const btn = document.createElement('button');
@@ -118,7 +121,7 @@ export default function decorate(block) {
 
   // Share metadata is captured at render time
   const getTitle = () => encodeURIComponent(document.title);
-  const getUrl   = () => encodeURIComponent(location.href);
+  const getUrl = () => encodeURIComponent(window.location.href);
 
   const buttons = [
     {
@@ -126,24 +129,21 @@ export default function decorate(block) {
       label: 'X (Twitter) でシェア',
       color: '#000',
       icon: ICONS.x,
-      getUrl: () =>
-        `https://twitter.com/intent/tweet?text=${getTitle()}&url=${getUrl()}`,
+      getUrl: () => `https://twitter.com/intent/tweet?text=${getTitle()}&url=${getUrl()}`,
     },
     {
       platform: 'facebook',
       label: 'Facebook でシェア',
       color: '#1877f2',
       icon: ICONS.facebook,
-      getUrl: () =>
-        `https://www.facebook.com/sharer/sharer.php?u=${getUrl()}`,
+      getUrl: () => `https://www.facebook.com/sharer/sharer.php?u=${getUrl()}`,
     },
     {
       platform: 'line',
       label: 'LINE でシェア',
       color: '#06C755',
       icon: ICONS.line,
-      getUrl: () =>
-        `https://line.me/R/msg/text/?${getTitle()}%20${getUrl()}`,
+      getUrl: () => `https://line.me/R/msg/text/?${getTitle()}%20${getUrl()}`,
     },
   ];
 

@@ -389,11 +389,11 @@ export default async function decorate(block) {
   /** @type {HTMLElement | null} */
   let fragment;
   if (fragmentLink) {
-    fragment = /** @type {HTMLElement | null} */ (await Promise.resolve(loadFragment(fragmentPath)));
+    fragment = /** @type {HTMLElement | null} */ (await loadFragment(fragmentPath));
   } else {
     fragment = await loadContentHtml();
     if (!fragment) {
-      fragment = /** @type {HTMLElement | null} */ (await Promise.resolve(loadFragment(fragmentPath)));
+      fragment = /** @type {HTMLElement | null} */ (await loadFragment(fragmentPath));
     }
   }
 
@@ -401,10 +401,10 @@ export default async function decorate(block) {
     ? [...fragment.querySelectorAll(':scope > .section')]
     : [];
 
-  const faqSection     = getSection(sections, 0, 'よくあるご質問');
-  const applySection   = getSection(sections, 1, 'お申し込み');
-  const linksSection   = getSection(sections, 2, 'リンク');
-  const snsSection     = getSection(sections, 3, 'SNS');
+  const faqSection = getSection(sections, 0, 'よくあるご質問');
+  const applySection = getSection(sections, 1, 'お申し込み');
+  const linksSection = getSection(sections, 2, 'リンク');
+  const snsSection = getSection(sections, 3, 'SNS');
   const copyrightSection = getSection(sections, 4);
 
   // ── 4. Compose footer HTML ──────────────────────────────────
