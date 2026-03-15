@@ -20,6 +20,18 @@
         "name": "keywords",
         "multi": true,
         "label": "Keywords"
+      },
+      {
+        "component": "checkbox",
+        "valueType": "boolean",
+        "name": "hide-header",
+        "label": "Hide Header"
+      },
+      {
+        "component": "checkbox",
+        "valueType": "boolean",
+        "name": "hide-footer",
+        "label": "Hide Footer"
       }
     ]
   },
