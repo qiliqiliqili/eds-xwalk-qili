@@ -24,6 +24,22 @@
       {
         "component": "select",
         "valueType": "string",
+        "name": "template",
+        "label": "Template",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Magazine",
+            "value": "magazine"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
         "name": "hide-header",
         "label": "Hide Header",
         "options": [

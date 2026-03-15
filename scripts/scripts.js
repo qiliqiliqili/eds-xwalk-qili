@@ -126,6 +126,11 @@ async function loadLazy(doc) {
   if (getMetadata('hide-footer') !== 'true') loadFooter(doc.querySelector('footer'));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
+
+  // Load template-specific CSS (e.g. styles/magazine.css for template=magazine pages)
+  const template = getMetadata('template');
+  if (template) loadCSS(`${window.hlx.codeBasePath}/styles/${template}.css`);
+
   loadFonts();
 }
 
