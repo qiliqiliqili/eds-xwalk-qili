@@ -27,100 +27,94 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Recommends variant
+   Recommends variant  (.cards.recommends)
    ─────────────────────────────────────────────────────────────
-   Used for the "Related articles" card grid at the bottom of
-   magazine article pages. Cards are borderless with 16:9 images.
+   Grid: 2 columns on mobile, 4 columns on desktop (≥ 900 px).
+   Matches the AES-autoi--signe layout from the original page.
    ───────────────────────────────────────────────────────────── */
-.cards.recommends > ul {
-  grid-template-columns: 1fr;
-  gap: 24px;
+
+/* Block-level font reset: EDS sets body at 22 px; scale down for cards */
+.cards.recommends {
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-@media (width >= 600px) {
-  .cards.recommends > ul {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* ── Grid ──────────────────────────────────────────────────── */
+.cards.recommends > ul {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
 @media (width >= 900px) {
   .cards.recommends > ul {
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
   }
 }
 
+/* ── Card item ─────────────────────────────────────────────── */
 .cards.recommends > ul > li {
   border: none;
   background: transparent;
 }
 
+/* ── Card image ────────────────────────────────────────────── */
 .cards.recommends > ul > li img {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
 }
 
+/* ── Card body ─────────────────────────────────────────────── */
 .cards.recommends .cards-card-body {
-  margin: 8px 0;
+  margin: 8px 0 0;
   padding: 0;
-
-  /* Override EDS base body font-size (22px) which inflates card content */
-  font-size: 14px;
-  line-height: 1.5;
 }
 
-/* Reset paragraph margins that are based on the 22px base font (0.8em = 17.6px) */
+/* Reset the large paragraph margins that inherit from the 22 px base */
 .cards.recommends .cards-card-body p {
   margin-top: 4px;
   margin-bottom: 0;
 }
 
+/* ── Metadata line (date / category) ──────────────────────── */
 .cards.recommends .cards-card-meta {
-  display: block;
   font-size: 12px;
   color: #888;
-  margin-bottom: 4px;
-}
-
-.cards.recommends .cards-card-category {
-  color: #888;
+  font-family: Oswald, sans-serif;
+  letter-spacing: 0.05em;
 }
 
 .cards.recommends .cards-card-category::before {
   content: ' / ';
 }
 
-/* ─── Card title link ──────────────────────────────────────────
- * EDS decorateButtons() adds class="button" to any sole <a> in a <p>,
- * which triggers heavy button styles in styles.css (blue bg, rounded, etc.).
- * Use !important on the key properties to override those safely.
- * ─────────────────────────────────────────────────────────────── */
+/* ── Title link ────────────────────────────────────────────── */
+
+/*
+ * cards.js removes the "button" class that EDS decorateButtons() injects,
+ * so the EDS pill-button styles (blue bg, border-radius) never apply.
+ * These rules only need to establish the desired visual style.
+ */
 .cards.recommends .cards-card-title a {
-  display: inline !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  color: #263033 !important;
+  color: #263033;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.5;
-  text-align: left;
+  text-decoration: underline;
   white-space: normal;
   overflow: visible;
-  text-overflow: unset;
-  text-decoration: underline;
 }
 
 .cards.recommends .cards-card-title a:hover {
-  background: transparent !important;
-  color: #263033 !important;
   text-decoration: none;
 }
 
-/* Show more button */
+/* ── Show-more button ──────────────────────────────────────── */
+
+/*
+ * <button> elements get border-radius: 2.4em from styles.css.
+ * Reset to a square, outlined style matching the original page.
+ */
 .cards.recommends .cards-show-more {
   display: block;
   margin: 2rem auto 0;
