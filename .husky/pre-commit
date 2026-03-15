@@ -1,1 +1,2 @@
+. ~/.nvm/nvm.sh
 node .husky/pre-commit.mjs
