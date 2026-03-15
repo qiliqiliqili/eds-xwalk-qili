@@ -73,6 +73,37 @@ function buildAutoBlocks() {
 }
 
 /**
+ * Adds .caption class to paragraphs that immediately follow an image
+ * inside magazine article body sections.
+ * Needed because EDS xwalk renders Image components as <p><picture>…</picture></p>,
+ * making plain `picture + p` CSS selectors ineffective.
+ * @param {Element} main
+ */
+/**
+ * Adds .caption to a paragraph that immediately follows an image element.
+ * Handles three possible DOM shapes produced by EDS xwalk / plain HTML:
+ *   a) xwalk:     div[data-aue] > picture  +  div[data-aue] > p
+ *   b) plain HTML: p > picture             +  p
+ *   c) plain HTML: picture (direct)        +  p (direct)
+ */
+function decorateMagazineCaptions(main) {
+  main.querySelectorAll('.section.magazine-article-body .default-content-wrapper').forEach((wrapper) => {
+    const items = [...wrapper.children];
+    items.forEach((el, i) => {
+      const hasImage = el.querySelector('picture, img')
+        || el.matches('picture')
+        || el.matches('img');
+      if (!hasImage) return;
+      const next = items[i + 1];
+      if (!next) return;
+      // Caption lives in next element's first <p>, or next itself if it is a <p>
+      const caption = next.matches('p') ? next : next.querySelector('p');
+      if (caption) caption.classList.add('caption');
+    });
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -84,6 +115,7 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateMagazineCaptions(main);
 }
 
 /**

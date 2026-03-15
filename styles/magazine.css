@@ -174,9 +174,9 @@
   margin-bottom: 0.75em;
 }
 
-/* Image captions — paragraph immediately following a picture/img */
-.section.magazine-article-body picture+p,
-.section.magazine-article-body img+p,
+/* Image captions — (0,2,2): direct element siblings */
+.section.magazine-article-body picture + p,
+.section.magazine-article-body img + p,
 .section.magazine-article-body .caption {
   font-size: 12px;
   color: #888;
@@ -327,6 +327,16 @@
   margin-bottom: 0.75rem;
 }
 
+/* Caption via :has() — specificity (0,2,3), must follow (0,2,2) */
+.section.magazine-article-body p:has(picture) + p,
+.section.magazine-article-body p:has(img) + p {
+  font-size: 12px;
+  color: #888;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  line-height: 1.6;
+}
+
 /* Category label — first paragraph — specificity (0,3,1) */
 .section.magazine-article-header p:first-child {
   font-size: 12px;
@@ -335,6 +345,24 @@
   color: #888;
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+/*
+ * xwalk caption: each component is a <div> inside .default-content-wrapper
+ *   div:has(picture) + div > p  — specificity (0,3,4), must follow (0,3,1)
+ *
+ * EDS xwalk structure:
+ *   .default-content-wrapper
+ *     > div[data-aue-type="media"]    { picture }
+ *     > div[data-aue-type="richtext"] { p }
+ */
+.section.magazine-article-body .default-content-wrapper > div:has(picture) + div > p,
+.section.magazine-article-body .default-content-wrapper > div:has(img) + div > p {
+  font-size: 12px;
+  color: #888;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  line-height: 1.6;
 }
 
 /* Small note / disclaimer — last paragraph — specificity (0,4,1) */
