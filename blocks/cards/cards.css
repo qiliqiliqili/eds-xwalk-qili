@@ -64,6 +64,16 @@
 .cards.recommends .cards-card-body {
   margin: 8px 0;
   padding: 0;
+
+  /* Override EDS base body font-size (22px) which inflates card content */
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Reset paragraph margins that are based on the 22px base font (0.8em = 17.6px) */
+.cards.recommends .cards-card-body p {
+  margin-top: 4px;
+  margin-bottom: 0;
 }
 
 .cards.recommends .cards-card-meta {
@@ -81,16 +91,19 @@
   content: ' / ';
 }
 
-/* Reset EDS button styles that decorateButtons() injects on single-link paragraphs */
-.cards.recommends .cards-card-title a,
-.cards.recommends .cards-card-title a.button:any-link {
-  display: inline;
-  margin: 0;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  background: transparent;
-  color: #263033;
+/* ─── Card title link ──────────────────────────────────────────
+ * EDS decorateButtons() adds class="button" to any sole <a> in a <p>,
+ * which triggers heavy button styles in styles.css (blue bg, rounded, etc.).
+ * Use !important on the key properties to override those safely.
+ * ─────────────────────────────────────────────────────────────── */
+.cards.recommends .cards-card-title a {
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #263033 !important;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.5;
@@ -98,13 +111,13 @@
   white-space: normal;
   overflow: visible;
   text-overflow: unset;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .cards.recommends .cards-card-title a:hover {
-  text-decoration: underline;
-  background: transparent;
-  color: #263033;
+  background: transparent !important;
+  color: #263033 !important;
+  text-decoration: none;
 }
 
 /* Show more button */

@@ -2,10 +2,12 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
 /* ─── Recommends show-more ─────────────────────────────────────
- * When the block has the class `recommends`, only the first 4 cards
- * are visible initially. A "もっと見る" button reveals the next 4
- * on each click and hides itself when all cards are shown.
+ * Matches AES-js-more8to4 behaviour:
+ *   - Initially show 8 cards (RECOMMENDS_INITIAL)
+ *   - "もっと見る" only appears when total cards > 8
+ *   - Each click reveals 4 more cards (RECOMMENDS_PAGE_SIZE)
  * ─────────────────────────────────────────────────────────────── */
+const RECOMMENDS_INITIAL = 8;
 const RECOMMENDS_PAGE_SIZE = 4;
 
 /**
@@ -17,15 +19,15 @@ function decorateRecommends(block) {
   if (!ul) return;
 
   const items = [...ul.querySelectorAll(':scope > li')];
-  if (items.length <= RECOMMENDS_PAGE_SIZE) {
-    // Nothing to paginate — all cards fit on the first page
+  if (items.length <= RECOMMENDS_INITIAL) {
+    // 8枚以下なら「もっと見る」ボタン不要
     return;
   }
 
-  // Hide items beyond the initial page
-  items.slice(RECOMMENDS_PAGE_SIZE).forEach((li) => li.classList.add('hidden'));
+  // Hide items beyond the initial 8
+  items.slice(RECOMMENDS_INITIAL).forEach((li) => li.classList.add('hidden'));
 
-  let visibleCount = RECOMMENDS_PAGE_SIZE;
+  let visibleCount = RECOMMENDS_INITIAL;
 
   // Build "もっと見る" (show more) button
   const btn = document.createElement('button');
