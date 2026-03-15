@@ -24,13 +24,13 @@
         },
         {
           "component": "checkbox",
-          "valueType": "boolean",
+          "valueType": "string",
           "name": "hide-header",
           "label": "Hide Header"
         },
         {
           "component": "checkbox",
-          "valueType": "boolean",
+          "valueType": "string",
           "name": "hide-footer",
           "label": "Hide Footer"
         }
