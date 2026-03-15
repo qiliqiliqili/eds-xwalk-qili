@@ -94,7 +94,7 @@ function buildPageTopBtn() {
 
   // Show/hide based on scroll position
   const onScroll = () => {
-    btn.classList.toggle('dmf-pagetop--visible', window.scrollY > 300);
+    btn.classList.toggle('dmf-pagetop-visible', window.scrollY > 300);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   return btn;

@@ -241,7 +241,7 @@ export default async function decorate(block) {
           const link = a.cloneNode(true);
           link.className = 'dmh-utility-link';
           if (a.dataset.variant === 'primary') {
-            link.classList.add('dmh-utility-link--primary');
+            link.classList.add('dmh-utility-link-primary');
           }
           li.append(link);
         }

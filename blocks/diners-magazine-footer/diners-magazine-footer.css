@@ -123,19 +123,6 @@
   color: rgb(255 255 255 / 50%);
 }
 
-.dmf-faq-list a {
-  color: rgb(255 255 255 / 80%);
-  text-decoration: none;
-  font-size: 1.2rem;
-  transition: color 0.15s ease;
-}
-
-.dmf-faq-list a:hover,
-.dmf-faq-list a:focus-visible {
-  color: #fff;
-  outline: none;
-}
-
 /* ─── Application buttons (白ボタン, matches dc__btn_white) ──── */
 .dmf-apply-btn {
   display: block;
@@ -310,6 +297,19 @@
   display: block;
 }
 
+.dmf-faq-list a {
+  color: rgb(255 255 255 / 80%);
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.15s ease;
+}
+
+.dmf-faq-list a:hover,
+.dmf-faq-list a:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Page-top button (fixed bottom-right)
    ═══════════════════════════════════════════════════════════════ */
@@ -335,7 +335,7 @@
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.dmf-pagetop--visible {
+.dmf-pagetop-visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;

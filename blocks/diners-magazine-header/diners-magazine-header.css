@@ -100,7 +100,7 @@
 }
 
 /* Primary variant: 入会お申し込み / クラブ・オンライン */
-.dmh-utility-link--primary {
+.dmh-utility-link-primary {
   border: 1px solid #004c97;
   color: #004c97;
   font-weight: 600;
@@ -109,8 +109,8 @@
   margin-left: 8px;
 }
 
-.dmh-utility-link--primary:hover,
-.dmh-utility-link--primary:focus-visible {
+.dmh-utility-link-primary:hover,
+.dmh-utility-link-primary:focus-visible {
   background: #004c97;
   color: #fff;
   opacity: 1;
@@ -224,7 +224,7 @@
   padding: 0;
 }
 
-.dmh-dropdown ul li a {
+.dmh-dropdown a {
   display: block;
   padding: 10px 32px;
   color: #444;
@@ -233,8 +233,8 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.dmh-dropdown ul li a:hover,
-.dmh-dropdown ul li a:focus-visible {
+.dmh-dropdown a:hover,
+.dmh-dropdown a:focus-visible {
   background: #f0f4fb;
   color: #004c97;
   outline: none;

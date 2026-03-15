@@ -58,20 +58,10 @@
   padding-bottom: 1.5rem;
 }
 
-/* Category label — first paragraph */
-.section.magazine-article-header p:first-child {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #888;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
 /* Gold italic sub-heading (em / i elements) */
 .section.magazine-article-header em,
 .section.magazine-article-header i {
-  font-family: 'Georgia', 'Noto Serif JP', serif;
+  font-family: Georgia, 'Noto Serif JP', serif;
   font-style: italic;
   color: #b7996c;
   display: block;
@@ -82,7 +72,7 @@
 
 /* H1 – main article title */
 .section.magazine-article-header h1 {
-  font-family: 'Noto Serif JP', 'Georgia', serif;
+  font-family: 'Noto Serif JP', Georgia, serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   line-height: 1.35;
@@ -158,7 +148,7 @@
 
 /* Body section headings */
 .section.magazine-article-body h2 {
-  font-family: 'Noto Serif JP', 'Georgia', serif;
+  font-family: 'Noto Serif JP', Georgia, serif;
   font-size: 1.5rem;
   color: #263033;
   margin: 2.5rem 0 1rem;
@@ -241,7 +231,7 @@
 }
 
 .section.magazine-recommends h2 {
-  font-family: 'Noto Serif JP', 'Georgia', serif;
+  font-family: 'Noto Serif JP', Georgia, serif;
   font-size: 2rem;
   color: #263033;
   margin-bottom: 2rem;
@@ -340,4 +330,14 @@
     margin-left: min(33.33%, calc(1200px * 0.3333));
     margin-right: auto;
   }
+}
+
+/* Category label — first paragraph (placed after all p rules for specificity order) */
+.section.magazine-article-header p:first-child {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 }
