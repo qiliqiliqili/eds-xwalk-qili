@@ -271,12 +271,6 @@
   transition: opacity 0.15s ease;
 }
 
-.dmf-copyright-icons a:hover,
-.dmf-copyright-icons a:focus-visible {
-  opacity: 1;
-  outline: none;
-}
-
 .dmf-copyright-icons img {
   height: 22px;
   width: auto;
@@ -307,6 +301,12 @@
 .dmf-links-row a:hover,
 .dmf-links-row a:focus-visible {
   color: #fff;
+  outline: none;
+}
+
+.dmf-copyright-icons a:hover,
+.dmf-copyright-icons a:focus-visible {
+  opacity: 1;
   outline: none;
 }
 
