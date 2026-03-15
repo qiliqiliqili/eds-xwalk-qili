@@ -59,19 +59,23 @@
   }
 }
 
-.columns.promo .button-container a {
+.columns.promo .button-container a,
+.columns.promo .button-container a.button:any-link {
   display: inline-block;
   margin-top: 16px;
   padding: 10px 24px;
   background: #fff;
   border: 1px solid #004c97;
+  border-radius: 0;
   color: #004c97;
   text-decoration: none;
   font-size: 14px;
+  font-weight: normal;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.columns.promo .button-container a:hover {
+.columns.promo .button-container a:hover,
+.columns.promo .button-container a.button:hover {
   background: #004c97;
   color: #fff;
 }

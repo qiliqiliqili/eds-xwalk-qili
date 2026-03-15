@@ -56,6 +56,7 @@
 }
 
 .cards.recommends > ul > li img {
+  width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
@@ -80,15 +81,30 @@
   content: ' / ';
 }
 
-.cards.recommends .cards-card-title a {
+/* Reset EDS button styles that decorateButtons() injects on single-link paragraphs */
+.cards.recommends .cards-card-title a,
+.cards.recommends .cards-card-title a.button:any-link {
+  display: inline;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
   color: #263033;
-  text-decoration: none;
   font-size: 14px;
+  font-weight: normal;
   line-height: 1.5;
+  text-align: left;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  text-decoration: none;
 }
 
 .cards.recommends .cards-card-title a:hover {
   text-decoration: underline;
+  background: transparent;
+  color: #263033;
 }
 
 /* Show more button */
@@ -97,6 +113,7 @@
   margin: 2rem auto 0;
   padding: 10px 32px;
   border: 1px solid #004c97;
+  border-radius: 0;
   background: white;
   color: #004c97;
   font-size: 14px;
