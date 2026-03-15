@@ -20,15 +20,15 @@
    text within ~680 px and pushed right-of-centre on desktop.
    ═══════════════════════════════════════════════════════════════ */
 .section.magazine-article-header .default-content-wrapper,
-.section.magazine-article-body   .default-content-wrapper,
-.section.magazine-info-box       .default-content-wrapper {
+.section.magazine-article-body .default-content-wrapper,
+.section.magazine-info-box .default-content-wrapper {
   max-width: 680px;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-article-header .default-content-wrapper,
-  .section.magazine-article-body   .default-content-wrapper,
-  .section.magazine-info-box       .default-content-wrapper {
+  .section.magazine-article-body .default-content-wrapper,
+  .section.magazine-info-box .default-content-wrapper {
     /* 4/12 cols offset = ~33.33 % of the 1200px content area */
     margin-left: min(33.33%, calc(1200px * 0.3333));
     margin-right: auto;
@@ -42,7 +42,7 @@
   padding: 3rem 1rem 2rem;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-article-header {
     max-width: 1200px;
     margin-inline: auto;
@@ -88,7 +88,7 @@
   padding: 1rem 1rem 2rem;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-article-body {
     max-width: 1200px;
     margin-inline: auto;
@@ -136,7 +136,7 @@
   padding: 1rem 1rem 2rem;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-info-box {
     max-width: 1200px;
     margin-inline: auto;
@@ -175,8 +175,8 @@
 }
 
 /* Image captions — paragraph immediately following a picture/img */
-.section.magazine-article-body picture + p,
-.section.magazine-article-body img + p,
+.section.magazine-article-body picture+p,
+.section.magazine-article-body img+p,
 .section.magazine-article-body .caption {
   font-size: 12px;
   color: #888;
@@ -197,7 +197,7 @@
   background: #f7f7f7;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-recommends {
     padding: 3rem 2rem;
   }
@@ -224,7 +224,7 @@
   border-top: 1px solid #eee;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-breadcrumb {
     max-width: 1200px;
     margin-inline: auto;
@@ -280,7 +280,7 @@
   padding: 2rem 1rem;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-promo {
     max-width: 1200px;
     margin-inline: auto;
@@ -302,7 +302,7 @@
   border-bottom: 1px solid #eee;
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   .section.magazine-sns .default-content-wrapper {
     max-width: 680px;
     margin-left: min(33.33%, calc(1200px * 0.3333));
@@ -313,7 +313,7 @@
 /* Header p variant rules — placed after all other p selectors (ascending specificity order) */
 
 /* Lead / introductory paragraph after H1 — specificity (0,2,2) */
-.section.magazine-article-header h1 + p {
+.section.magazine-article-header h1+p {
   font-size: 15px;
   color: #333;
   line-height: 1.8;
@@ -321,7 +321,7 @@
 }
 
 /* Author credits + subsequent paragraphs — specificity (0,2,2) */
-.section.magazine-article-header p + p {
+.section.magazine-article-header p+p {
   font-size: 14px;
   color: #555;
   margin-bottom: 0.75rem;

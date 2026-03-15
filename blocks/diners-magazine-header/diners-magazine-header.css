@@ -186,7 +186,7 @@
 }
 
 /* Mobile: vertical stacked items */
-.dmh-nav-list > li {
+.dmh-nav-list>li {
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -234,7 +234,7 @@
 }
 
 /* Drop indicator for items with sub-menu */
-.dmh-nav-drop > .dmh-nav-link::after {
+.dmh-nav-drop>.dmh-nav-link::after {
   content: ' ▾';
   font-size: 10px;
   opacity: 0.6;
@@ -324,7 +324,7 @@
 }
 
 /* ─── Desktop overrides (≥ 900px) ────────────────────────────── */
-@media (width >= 900px) {
+@media (width >=900px) {
   /* Show utility nav */
   .dmh-utility-nav {
     display: block;
@@ -361,7 +361,7 @@
     height: 50px;
   }
 
-  .dmh-nav-list > li {
+  .dmh-nav-list>li {
     border-bottom: none;
     position: relative;
     height: 50px;

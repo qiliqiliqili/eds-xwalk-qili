@@ -1,36 +1,63 @@
 import { exec } from "node:child_process";
 
-const run = (cmd) => new Promise((resolve, reject) => exec(
+/**
+ * Run a shell command and return { stdout, stderr, code }.
+ * Never rejects — caller decides what to do with non-zero exit codes.
+ */
+const run = (cmd) => new Promise((resolve) => exec(
   cmd,
-  (error, stdout) => {
-    if (error) reject(error);
-    else resolve(stdout);
-  }
+  (error, stdout, stderr) => resolve({
+    stdout: stdout.trim(),
+    stderr: stderr.trim(),
+    code: error ? (error.code ?? 1) : 0,
+  }),
 ));
 
 const changeset = await run('git diff --cached --name-only --diff-filter=ACMR');
-const modifiedFiles = changeset.split('\n').filter(Boolean);
+const modifiedFiles = changeset.stdout.split('\n').filter(Boolean);
 
-// check if there are any model files staged
-const modifledPartials = modifiedFiles.filter((file) => file.match(/(^|\/)_.*.json/));
-if (modifledPartials.length > 0) {
-  const output = await run('npm run build:json --silent');
-  console.log(output);
+// ── Model JSON rebuild ────────────────────────────────────────────
+const modifiedPartials = modifiedFiles.filter((f) => f.match(/(^|\/)_.*.json/));
+if (modifiedPartials.length > 0) {
+  const { stdout, code } = await run('npm run build:json --silent');
+  if (stdout) console.log(stdout);
+  if (code !== 0) process.exit(code);
   await run('git add component-models.json component-definition.json component-filters.json');
 }
 
-// lint staged JS/CSS files
-const stagedJs = modifiedFiles.filter((f) => f.match(/\.(js|mjs|json)$/));
-const stagedCss = modifiedFiles.filter((f) => f.match(/\.css$/));
+// ── Lint helpers ──────────────────────────────────────────────────
+const stagedJs = modifiedFiles.filter((f) => /\.(js|mjs|json)$/.test(f));
+const stagedCss = modifiedFiles.filter((f) => /\.css$/.test(f));
 
-if (stagedJs.length > 0) {
-  console.log('Running ESLint on staged files...');
-  const jsOutput = await run(`npx eslint ${stagedJs.join(' ')}`).catch((e) => { throw e; });
-  if (jsOutput) console.log(jsOutput);
+/**
+ * Run linter with --fix, re-stage fixed files, then verify no errors remain.
+ * @param {string} linter   e.g. 'npx eslint --fix' or 'npx stylelint --fix'
+ * @param {string[]} files
+ * @param {string} label    displayed in log output
+ */
+async function lintAndFix(linter, files, label) {
+  if (files.length === 0) return;
+  const fileList = files.join(' ');
+
+  // 1. Auto-fix what can be fixed
+  console.log(`${label}: fixing…`);
+  await run(`${linter} ${fileList}`);
+
+  // 2. Re-stage any files the linter modified
+  await run(`git add ${fileList}`);
+
+  // 3. Re-run without --fix to surface any remaining errors
+  const checkCmd = linter.replace(' --fix', '');
+  console.log(`${label}: checking…`);
+  const { stdout, stderr, code } = await run(`${checkCmd} ${fileList}`);
+
+  if (code !== 0) {
+    console.error(`\n${label} errors — fix these before committing:\n`);
+    if (stdout) console.error(stdout);
+    if (stderr) console.error(stderr);
+    process.exit(code);
+  }
 }
 
-if (stagedCss.length > 0) {
-  console.log('Running Stylelint on staged files...');
-  const cssOutput = await run(`npx stylelint ${stagedCss.join(' ')}`).catch((e) => { throw e; });
-  if (cssOutput) console.log(cssOutput);
-}
+await lintAndFix('npx eslint --fix', stagedJs, 'ESLint');
+await lintAndFix('npx stylelint --fix', stagedCss, 'Stylelint');

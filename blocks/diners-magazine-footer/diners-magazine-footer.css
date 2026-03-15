@@ -348,7 +348,7 @@
 }
 
 /* ─── Desktop overrides (≥ 900px) ────────────────────────────── */
-@media (width >= 900px) {
+@media (width >=900px) {
   .dmf-columns {
     flex-direction: row;
     align-items: flex-start;
