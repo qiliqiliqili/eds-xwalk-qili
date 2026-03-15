@@ -33,8 +33,21 @@
    magazine article pages. Cards are borderless with 16:9 images.
    ───────────────────────────────────────────────────────────── */
 .cards.recommends > ul {
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (width >= 600px) {
+  .cards.recommends > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .cards.recommends > ul {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
 }
 
 .cards.recommends > ul > li {
@@ -53,15 +66,18 @@
 }
 
 .cards.recommends .cards-card-meta {
-  display: flex;
-  gap: 8px;
+  display: block;
   font-size: 12px;
   color: #888;
   margin-bottom: 4px;
 }
 
 .cards.recommends .cards-card-category {
-  color: #004c97;
+  color: #888;
+}
+
+.cards.recommends .cards-card-category::before {
+  content: ' / ';
 }
 
 .cards.recommends .cards-card-title a {

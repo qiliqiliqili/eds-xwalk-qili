@@ -51,7 +51,7 @@
 
 @media (width >= 900px) {
   .columns.promo > div > .columns-img-col {
-    flex: 0 0 200px;
+    flex: 0 0 50%;
   }
 
   .columns.promo > div > div:not(.columns-img-col) {
