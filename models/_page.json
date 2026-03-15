@@ -23,16 +23,24 @@
           "label": "Keywords"
         },
         {
-          "component": "checkbox",
+          "component": "select",
           "valueType": "string",
           "name": "hide-header",
-          "label": "Hide Header"
+          "label": "Hide Header",
+          "options": [
+            { "name": "No", "value": "" },
+            { "name": "Yes", "value": "true" }
+          ]
         },
         {
-          "component": "checkbox",
+          "component": "select",
           "valueType": "string",
           "name": "hide-footer",
-          "label": "Hide Footer"
+          "label": "Hide Footer",
+          "options": [
+            { "name": "No", "value": "" },
+            { "name": "Yes", "value": "true" }
+          ]
         }
       ]
     }
