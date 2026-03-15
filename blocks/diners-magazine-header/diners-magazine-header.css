@@ -233,13 +233,6 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.dmh-dropdown a:hover,
-.dmh-dropdown a:focus-visible {
-  background: #f0f4fb;
-  color: #004c97;
-  outline: none;
-}
-
 /* Drop indicator for items with sub-menu */
 .dmh-nav-drop > .dmh-nav-link::after {
   content: ' ▾';
@@ -313,6 +306,13 @@
 .dmh-sub-nav-list a:focus-visible {
   color: #002554;
   border-bottom-color: #4d6687;
+  outline: none;
+}
+
+.dmh-dropdown a:hover,
+.dmh-dropdown a:focus-visible {
+  background: #f0f4fb;
+  color: #004c97;
   outline: none;
 }
 

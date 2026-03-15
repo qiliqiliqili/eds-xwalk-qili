@@ -179,20 +179,6 @@
   border-left: none;
 }
 
-.dmf-links-row a {
-  display: block;
-  padding: 2px 12px;
-  color: rgb(255 255 255 / 75%);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.dmf-links-row a:hover,
-.dmf-links-row a:focus-visible {
-  color: #fff;
-  outline: none;
-}
-
 /* ═══════════════════════════════════════════════════════════════
    SNS icon row — centered
    ═══════════════════════════════════════════════════════════════ */
@@ -306,6 +292,20 @@
 
 .dmf-faq-list a:hover,
 .dmf-faq-list a:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
+.dmf-links-row a {
+  display: block;
+  padding: 2px 12px;
+  color: rgb(255 255 255 / 75%);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.dmf-links-row a:hover,
+.dmf-links-row a:focus-visible {
   color: #fff;
   outline: none;
 }

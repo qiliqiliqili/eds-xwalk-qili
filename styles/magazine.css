@@ -81,28 +81,6 @@
   letter-spacing: -0.01em;
 }
 
-/* Author credits + lead text paragraphs after H1 */
-.section.magazine-article-header p + p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 0.75rem;
-}
-
-/* Lead / introductory paragraph (bold or first after H1) */
-.section.magazine-article-header h1 + p {
-  font-size: 15px;
-  color: #333;
-  line-height: 1.8;
-  font-weight: 500;
-}
-
-/* Small note / disclaimer text (strong or last paragraph) */
-.section.magazine-article-header p:last-child:not(:first-child) {
-  font-size: 12px;
-  color: #999;
-  margin-top: 1rem;
-}
-
 /* ═══════════════════════════════════════════════════════════════
    2.  Article body section
    ═══════════════════════════════════════════════════════════════ */
@@ -332,7 +310,24 @@
   }
 }
 
-/* Category label — first paragraph (placed after all p rules for specificity order) */
+/* Header p variant rules — placed after all other p selectors (ascending specificity order) */
+
+/* Lead / introductory paragraph after H1 — specificity (0,2,2) */
+.section.magazine-article-header h1 + p {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+/* Author credits + subsequent paragraphs — specificity (0,2,2) */
+.section.magazine-article-header p + p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+/* Category label — first paragraph — specificity (0,3,1) */
 .section.magazine-article-header p:first-child {
   font-size: 12px;
   letter-spacing: 0.12em;
@@ -340,4 +335,11 @@
   color: #888;
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+/* Small note / disclaimer — last paragraph — specificity (0,4,1) */
+.section.magazine-article-header p:last-child:not(:first-child) {
+  font-size: 12px;
+  color: #999;
+  margin-top: 1rem;
 }
