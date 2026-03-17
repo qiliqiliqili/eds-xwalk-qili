@@ -107,14 +107,21 @@ export default async function decorate(block) {
   const headerEl = doc.querySelector('header.dc__diners_header');
   if (!headerEl) return;
 
+  // Convert <header> → <div> so common.js's $("header").css("position","fixed")
+  // scroll handler cannot match and override our layout control.
+  // All class-based selectors (.dc__diners_header, etc.) still work normally.
+  const headerDiv = document.createElement('div');
+  [...headerEl.attributes].forEach(({ name, value }) => headerDiv.setAttribute(name, value));
+  while (headerEl.firstChild) headerDiv.appendChild(headerEl.firstChild);
+
   // Place the header inside a fixed wrapper.
   // module_v2.css sets .dc__diners_header { position: absolute }; override to relative
   // so the fixed .dmh-wrapper handles positioning.
-  headerEl.style.position = 'relative';
+  headerDiv.style.position = 'relative';
 
   const wrapper = document.createElement('div');
   wrapper.className = 'dmh-wrapper';
-  wrapper.append(headerEl);
+  wrapper.append(headerDiv);
 
   // ── Magazine sub-nav (Section 2 of this block's content.html) ──
   const fragment = await loadSubNavContent();
@@ -167,15 +174,50 @@ export default async function decorate(block) {
 
   block.append(wrapper);
 
-  // Update body padding so page content is not hidden under the fixed header
+  // ── Scroll: hide/show dc__menu_1 to replicate original sticky behavior ──────
+  // At page top : full header visible (menu_1 + menu_2 + sub-nav).
+  // On scroll   : menu_1 hides, only menu_2 + sub-nav remain fixed at top.
+  // This mirrors what common.js originally did ($('#dc__menu_1').hide()),
+  // but driven by our own listener so common.js's scroll handler is not needed.
+  const menu1El = headerDiv.querySelector('#dc__menu_1');
+  let isHeaderShrunk = false;
+
+  window.addEventListener('scroll', () => {
+    const scrolled = (window.scrollY || document.documentElement.scrollTop) > 82;
+    if (scrolled === isHeaderShrunk) return;
+    isHeaderShrunk = scrolled;
+    if (menu1El) menu1El.style.display = scrolled ? 'none' : '';
+  }, { passive: true });
+
+  // ── Body padding: always based on the full wrapper height (menu_1 visible) ──
+  // Body padding stays constant so the content never jumps when menu_1 hides.
+  // Sets inline style directly so it overrides common.js's resize handler which
+  // runs $("body").css("padding-top","12.2rem") when #dc__menu_2nd is absent.
   const updateHeight = () => {
+    // Temporarily reveal menu_1 to measure the full header height accurately.
+    const wasHidden = menu1El && menu1El.style.display === 'none';
+    if (wasHidden) menu1El.style.display = '';
     const height = wrapper.offsetHeight;
-    if (height) document.body.style.setProperty('--dmh-height', `${height}px`);
+    if (wasHidden) menu1El.style.display = 'none';
+    if (height) {
+      document.body.style.setProperty('--dmh-height', `${height}px`);
+      document.body.style.paddingTop = `${height}px`;
+    }
   };
   requestAnimationFrame(updateHeight);
   window.addEventListener('load', updateHeight);
+  // Fires after common.js's resize handler (registered later → runs later).
+  window.addEventListener('resize', updateHeight);
 
   // Load jQuery then common.js for header dropdown / SP menu interactivity
   await loadScript(`${REVO_PATH}/assets/jquery.min.js`);
   await loadScript(`${REVO_PATH}/assets/common.js`);
+
+  // Disable common.js's scroll-based header position changes.
+  // common.js checks $(window).data("fixed_header") === false to skip its scroll
+  // handler entirely — our own listener above manages menu_1 show/hide instead.
+  if (window.jQuery) window.jQuery(window).data('fixed_header', false);
+
+  // Override body padding that common.js set during its $(function(){}) init.
+  requestAnimationFrame(updateHeight);
 }
