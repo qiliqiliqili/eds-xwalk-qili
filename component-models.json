@@ -56,6 +56,22 @@
     ]
   },
   {
+    "id": "text",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Center",
+            "value": "center"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "image",
     "fields": [
       {
@@ -168,6 +184,10 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Center",
+            "value": "center"
           }
         ]
       }
