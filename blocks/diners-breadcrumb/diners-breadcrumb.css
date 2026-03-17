@@ -61,6 +61,26 @@
   color: #263033;
 }
 
+/* ── Magazine variant — center-align image & text ───────────── */
+.diners-breadcrumb.magazine {
+  text-align: center;
+}
+
+.diners-breadcrumb.magazine .diners-breadcrumb-nav ol {
+  justify-content: center;
+}
+
+.diners-breadcrumb.magazine .diners-breadcrumb-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.diners-breadcrumb.magazine img {
+  display: block;
+  margin-inline: auto;
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (width <= 768px) {
   .diners-breadcrumb-nav ol {
