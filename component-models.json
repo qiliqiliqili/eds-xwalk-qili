@@ -24,22 +24,6 @@
       {
         "component": "select",
         "valueType": "string",
-        "name": "template",
-        "label": "Template",
-        "options": [
-          {
-            "name": "Default",
-            "value": ""
-          },
-          {
-            "name": "Magazine",
-            "value": "magazine"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
         "name": "hide-header",
         "label": "Hide Header",
         "options": [
@@ -184,50 +168,6 @@
           {
             "name": "Highlight",
             "value": "highlight"
-          },
-          {
-            "name": "Magazine: Article Header",
-            "value": "magazine-article-header"
-          },
-          {
-            "name": "Magazine: Article Body",
-            "value": "magazine-article-body"
-          },
-          {
-            "name": "Magazine: Info Box",
-            "value": "magazine-info-box"
-          },
-          {
-            "name": "Magazine: Promo",
-            "value": "magazine-promo"
-          },
-          {
-            "name": "Magazine: SNS Share",
-            "value": "magazine-sns"
-          },
-          {
-            "name": "Magazine: Recommends",
-            "value": "magazine-recommends"
-          },
-          {
-            "name": "Magazine: Breadcrumb",
-            "value": "magazine-breadcrumb"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "cards",
-    "fields": [
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style Variant",
-        "options": [
-          {
-            "name": "Recommends（関連記事グリッド）",
-            "value": "recommends"
           }
         ]
       }
@@ -268,19 +208,12 @@
         "name": "rows",
         "value": "",
         "label": "Rows"
-      },
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style Variant",
-        "options": [
-          {
-            "name": "Promo（画像＋テキスト・枠付き）",
-            "value": "promo"
-          }
-        ]
       }
     ]
+  },
+  {
+    "id": "diners-breadcrumb",
+    "fields": []
   },
   {
     "id": "diners-revo",
@@ -326,30 +259,6 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "sns-share",
-    "fields": []
-  },
-  {
-    "id": "diners-magazine-header",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "reference",
-        "label": "Nav Fragment（省略時は content.html を使用）"
-      }
-    ]
-  },
-  {
-    "id": "diners-magazine-footer",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "reference",
-        "label": "Footer Fragment（省略時は content.html を使用）"
       }
     ]
   }

@@ -91,8 +91,7 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Cards",
-                  "filter": "cards",
-                  "model": "cards"
+                  "filter": "cards"
                 }
               }
             }
@@ -122,8 +121,21 @@
                 "resourceType": "core/franklin/components/columns/v1/columns",
                 "template": {
                   "columns": "2",
-                  "rows": "1",
-                  "model": "columns"
+                  "rows": "1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Diners Breadcrumb",
+          "id": "diners-breadcrumb",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Diners Breadcrumb"
                 }
               }
             }
@@ -169,48 +181,6 @@
                 "template": {
                   "name": "Hero",
                   "model": "hero"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "SNS Share",
-          "id": "sns-share",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "SNS Share"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Diners Magazine Header",
-          "id": "diners-magazine-header",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Diners Magazine Header"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Diners Magazine Footer",
-          "id": "diners-magazine-footer",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Diners Magazine Footer"
                 }
               }
             }
