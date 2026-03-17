@@ -1,365 +1,42 @@
 /*
  * diners-magazine-footer styles
  * ─────────────────────────────
- * Prefix: dmf-
- *
- * Matches the original dc__diners_footer / dc__diners_header layout:
- *
- *  .dmf-wrapper                 ← dark navy bg (#002554)
- *    .dmf-content               ← max-width container (padding 4rem 0)
- *      .dmf-columns             ← flex row: FAQ (58%) | Apply (33%)
- *        .dmf-col-faq
- *          .dmf-section-title-row
- *          .dmf-faq-list
- *        .dmf-col-apply
- *          .dmf-section-title-row
- *          .dmf-apply-btn
- *      .dmf-links               ← centered link rows with dividers
- *      .dmf-sns                 ← SNS icon row (centered)
- *    .dmf-copyright             ← darkest bar: logo | text | icons
- *  .dmf-pagetop                 ← fixed bottom-right scroll button
+ * The footer HTML and styles come from diners-revo/assets/ (module_v2.css etc.).
+ * This file provides only EDS reset overrides scoped to the footer wrapper.
  */
 
-/* ─── Reset scope ─────────────────────────────────────────────── */
-.dmf-wrapper *,
-.dmf-wrapper *::before,
-.dmf-wrapper *::after {
-  box-sizing: border-box;
-}
+/* ─── EDS reset overrides ─────────────────────────────────────── */
 
-/* ─── Wrapper (dark navy, matching dc__diners_footer) ─────────── */
-.dmf-wrapper {
-  background-color: #002554;
-  color: #fff;
-  font-size: 1.3rem;
-  line-height: 1.7;
-}
+/* EDS applies global styles (img, a, button) that conflict with the
+   original Diners Club styles. Revert them within the footer wrapper. */
 
-/* ─── Content container ───────────────────────────────────────── */
-.dmf-content {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 4rem 30px 2rem;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   FAQ + Apply two-column layout
-   dc__col_7 ≈ 58.33%  /  dc__col_4 ≈ 33.33%
-   ═══════════════════════════════════════════════════════════════ */
-.dmf-columns {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-bottom: 3rem;
-}
-
-.dmf-col-faq {
-  flex: 7;
-}
-
-.dmf-col-apply {
-  flex: 4;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* ─── Section title row (title + 一覧へ link) ─────────────────── */
-.dmf-section-title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 1.2rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgb(255 255 255 / 20%);
-}
-
-/* ─── Section titles ──────────────────────────────────────────── */
-.dmf-section-title {
-  display: inline-block;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #fff;
-  margin: 0;
-}
-
-/* 一覧へ link */
-.dmf-faq-list-link {
-  font-size: 1.1rem;
-  color: rgb(255 255 255 / 70%);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.15s ease;
-}
-
-.dmf-faq-list-link:hover,
-.dmf-faq-list-link:focus-visible {
-  color: #fff;
-  outline: none;
-}
-
-/* ─── FAQ list ────────────────────────────────────────────────── */
-.dmf-faq-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  columns: 1;
-}
-
-.dmf-faq-list li {
-  break-inside: avoid;
-  margin-bottom: 0.6rem;
-  padding-left: 1.2rem;
-  position: relative;
-  letter-spacing: -0.01em;
-}
-
-.dmf-faq-list li::before {
-  content: '›';
-  position: absolute;
-  left: 0;
-  color: rgb(255 255 255 / 50%);
-}
-
-/* ─── Application buttons (白ボタン, matches dc__btn_white) ──── */
-.dmf-apply-btn {
-  display: block;
-  width: 100%;
-  padding: 0.35rem 1.6rem;
-  line-height: 3rem;
+:where(.dmf-wrapper) img {
+  max-width: 100%;
   height: auto;
-  border: 1px solid #92bbd5;
-  color: #2477ab;
-  background: #fff;
-  text-align: center;
-  text-decoration: none;
-  font-size: 1.4rem;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.dmf-apply-btn:hover,
-.dmf-apply-btn:focus-visible {
-  background: #2477ab;
-  border-color: #2477ab;
-  color: #fff;
-  outline: none;
+:where(.dmf-wrapper) button {
+  all: revert;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Footer link rows — centered, with border-left dividers
-   ═══════════════════════════════════════════════════════════════ */
-.dmf-links {
-  border-top: 1px solid rgb(255 255 255 / 12%);
-  padding-top: 2.4rem;
-  margin-top: 1.6rem;
-  margin-bottom: 1.6rem;
-  text-align: center;
-  font-size: 1.3rem;
+:where(.dmf-wrapper) button:hover,
+:where(.dmf-wrapper) button:focus {
+  background-color: revert;
+  cursor: revert;
 }
 
-.dmf-links-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  list-style: none;
-  margin: 0 0 0.6rem;
-  padding: 0;
+:where(.dmf-wrapper) a:any-link {
+  color: revert;
+  text-decoration: revert;
 }
 
-.dmf-links-row li {
-  font-size: 1.2rem;
-  border-left: 1px solid rgb(255 255 255 / 25%);
+:where(.dmf-wrapper) a:hover {
+  color: revert;
+  text-decoration: revert;
 }
 
-.dmf-links-row li:first-child {
-  border-left: none;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   SNS icon row — centered
-   ═══════════════════════════════════════════════════════════════ */
-.dmf-sns {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.6rem;
-}
-
-.dmf-sns-list {
-  display: flex;
-  gap: 10px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dmf-sns-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 15%);
-  color: #fff;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.dmf-sns-link:hover,
-.dmf-sns-link:focus-visible {
-  background: rgb(255 255 255 / 35%);
-  outline: none;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   Copyright bar — darkest layer (matches dc__copy)
-   Layout: [logo left] [copyright center] [icons right]
-   ═══════════════════════════════════════════════════════════════ */
-.dmf-copyright {
-  background: #001a3a;
-  padding: 1rem 0;
-}
-
-.dmf-copyright-inner {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 30px;
-}
-
-/* Left: corporate logo */
-.dmf-copyright-logo {
-  flex-shrink: 0;
-}
-
-.dmf-copyright-logo img {
-  height: 24px;
-  width: auto;
-  display: block;
-}
-
-/* Center: copyright text */
-.dmf-copyright-text {
-  flex: 1;
-  font-size: 1.1rem;
-  color: rgb(255 255 255 / 50%);
-  margin: 0;
-  letter-spacing: 0.03em;
-  text-align: center;
-}
-
-/* Right: utility icons (remote operator, international) */
-.dmf-copyright-icons {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
-.dmf-copyright-icons a {
-  display: flex;
-  align-items: center;
-  opacity: 0.6;
-  transition: opacity 0.15s ease;
-}
-
-.dmf-copyright-icons img {
-  height: 22px;
-  width: auto;
-  display: block;
-}
-
-.dmf-faq-list a {
-  color: rgb(255 255 255 / 80%);
-  text-decoration: none;
-  font-size: 1.2rem;
-  transition: color 0.15s ease;
-}
-
-.dmf-links-row a {
-  display: block;
-  padding: 2px 12px;
-  color: rgb(255 255 255 / 75%);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.dmf-faq-list a:hover,
-.dmf-faq-list a:focus-visible {
-  color: #fff;
-  outline: none;
-}
-
-.dmf-links-row a:hover,
-.dmf-links-row a:focus-visible {
-  color: #fff;
-  outline: none;
-}
-
-.dmf-copyright-icons a:hover,
-.dmf-copyright-icons a:focus-visible {
-  opacity: 1;
-  outline: none;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   Page-top button (fixed bottom-right)
-   ═══════════════════════════════════════════════════════════════ */
-.dmf-pagetop {
-  position: fixed;
-  inset-block-end: 24px;
-  inset-inline-end: 24px;
-  z-index: 90;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgb(0 0 0 / 40%);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
-  opacity: 0;
-  transform: translateY(16px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.dmf-pagetop-visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.dmf-pagetop:hover,
-.dmf-pagetop:focus-visible {
-  background: rgb(0 0 0 / 65%);
-  outline: none;
-}
-
-/* ─── Desktop overrides (≥ 900px) ────────────────────────────── */
-@media (width >=900px) {
-  .dmf-columns {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .dmf-faq-list {
-    columns: 2;
-    column-gap: 24px;
-  }
-
-  .dmf-col-apply {
-    min-width: 260px;
-  }
+/* Remove hard min-width from original footer CSS on narrower viewports */
+/* stylelint-disable-next-line selector-class-pattern */
+.dmf-wrapper .dc__diners_footer {
+  min-width: 0;
 }
