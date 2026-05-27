@@ -215,7 +215,7 @@
     "id": "custom-embed",
     "fields": [
       {
-        "component": "text",
+        "component": "textarea",
         "valueType": "string",
         "name": "htmlContent",
         "label": "HTML Content",
