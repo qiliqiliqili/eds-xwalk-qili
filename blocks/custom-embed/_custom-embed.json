@@ -21,11 +21,11 @@
       "id": "custom-embed",
       "fields": [
         {
-          "component": "textarea",
+          "component": "text",
           "valueType": "string",
-          "name": "htmlContent",
-          "label": "HTML Content",
-          "description": "Classic AEM の HTML 本文を貼り付けてください（<link>/<script> タグは除く。それらは下の Resource URLs フィールドに記入してください）。"
+          "name": "htmlUrl",
+          "label": "HTML File URL",
+          "description": "DAM にアップロードした HTML ファイルのパスを記入してください。例: /content/dam/custom-embed/html/recruit.html"
         },
         {
           "component": "textarea",

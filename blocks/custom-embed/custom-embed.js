@@ -1,18 +1,25 @@
 /**
- * Custom Embed block — renders raw HTML pasted by an author.
+ * Custom Embed block — DAM に保存した HTML ファイルを fetch して描画する。
+ *
+ * EDS は textarea フィールドの値を sanitize するため、HTML 本文は
+ * DAM に .html ファイルとしてアップロードし、ブロックはそのパスを参照する。
  *
  * Authoring (Universal Editor):
- *   1. "HTML Content" フィールド: Classic AEM の HTML 本文を貼り付ける
- *      （<link>/<script> タグは EDS が除去するため、このフィールドには入れない）
+ *   1. "HTML File URL" フィールド: DAM パスを記入
+ *        例: /content/dam/custom-embed/html/recruit.html
  *   2. "Resource URLs" フィールド: 読み込む CSS/JS の DAM パスを1行1つで記入
- *      例:
- *        /content/dam/sumitclub/eds/css/module_v2.css
- *        /content/dam/sumitclub/eds/js/jquery.min.js
+ *        例:
+ *          /content/dam/custom-embed/css/module_v2.css
+ *          /content/dam/custom-embed/js/jquery.min.js
  *
  * ページメタデータ "aem-base-url" でベース URL を設定します:
  *   テスト: https://publish-p1234-e5678.adobeaemcloud.com
  *   本番:   https://www.sumitclub.jp
  * 未設定の場合は window.location.origin を使用します。
+ *
+ * ローカルテスト用フォールバック:
+ *   cell[0] の textContent が .html で終わらない場合（インライン HTML）は
+ *   そのまま innerHTML として使用します。
  */
 
 function getAemBaseUrl() {
@@ -75,32 +82,11 @@ function rewriteImageSrcs(container, baseUrl) {
 }
 
 /**
- * aem.js の wrapTextNodes() はテキストノードを <p> で包むため、
- * cell.firstElementChild が null でなくなる場合がある。
- * 単一 <p> + 単一テキストノードのパターンは wrapTextNodes による包みと判定し
- * cell.textContent を返す（元の文字列を復元できる）。
- */
-function extractRawText(cell) {
-  const { firstElementChild: first } = cell;
-  if (!first) return cell.textContent.trim();
-  if (
-    cell.children.length === 1
-    && first.tagName === 'P'
-    && first.childNodes.length === 1
-    && first.firstChild.nodeType === Node.TEXT_NODE
-  ) {
-    return cell.textContent.trim();
-  }
-  return cell.innerHTML;
-}
-
-/**
  * Resource URLs フィールド（1行1パス）から CSS/JS URL を読み込む。
- * EDS 配信が <link>/<script> タグを除去するため、パスをプレーンテキストで格納する。
+ * textContent を使うことで EDS が <p>/<br> で囲んでも純粋なパス文字列を取得できる。
  */
 async function loadResources(urlsCell, baseUrl) {
   if (!urlsCell) return;
-  // textContent を使うことで EDS が <p> や <br> で囲んでも純粋なパス文字列を取得できる
   const raw = urlsCell.textContent;
   const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
   const scripts = [];
@@ -121,6 +107,34 @@ async function loadResources(urlsCell, baseUrl) {
   }, Promise.resolve());
 }
 
+/**
+ * cell[0] の内容を解決して HTML 文字列を返す。
+ *   - .html で終わる単一行  → DAM ファイルを fetch（Cloud モード）
+ *   - それ以外              → cell の innerHTML をそのまま使用（ローカルテストモード）
+ */
+async function resolveHtml(htmlCell, baseUrl) {
+  const text = htmlCell.textContent.trim();
+  const isSingleLine = !text.includes('\n');
+  if (isSingleLine && text.endsWith('.html')) {
+    const url = toAbsolute(text, baseUrl);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`custom-embed: fetch failed ${resp.status} ${url}`);
+    return resp.text();
+  }
+  // ローカルテスト: cell 内にインライン HTML が直接入っている場合
+  const { firstElementChild: first } = htmlCell;
+  if (!first) return text;
+  if (
+    htmlCell.children.length === 1
+    && first.tagName === 'P'
+    && first.childNodes.length === 1
+    && first.firstChild.nodeType === Node.TEXT_NODE
+  ) {
+    return text;
+  }
+  return htmlCell.innerHTML;
+}
+
 export default async function decorate(block) {
   const cells = [...block.querySelectorAll(':scope > div > div')];
   const htmlCell = cells[0];
@@ -129,22 +143,19 @@ export default async function decorate(block) {
 
   const baseUrl = getAemBaseUrl();
 
-  // Resource URLs フィールドから CSS/JS を先に読み込む
   await loadResources(urlsCell, baseUrl);
 
-  const rawHtml = extractRawText(htmlCell);
+  const rawHtml = await resolveHtml(htmlCell, baseUrl);
   block.innerHTML = '';
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(rawHtml, 'text/html');
 
-  // HTML 内に残っている <link rel="stylesheet"> があれば注入
   doc.querySelectorAll('link[rel="stylesheet"]').forEach((el) => {
     const href = toAbsolute(el.getAttribute('href'), baseUrl);
     if (href) injectStylesheet(href);
   });
 
-  // <style> タグがあれば注入
   doc.querySelectorAll('style').forEach((el) => {
     injectInlineStyle(el.textContent);
   });
@@ -156,6 +167,5 @@ export default async function decorate(block) {
   rewriteImageSrcs(wrapper, baseUrl);
   block.appendChild(wrapper);
 
-  // HTML 内に残っている <script> があれば実行
   await executeScripts(wrapper, baseUrl);
 }
