@@ -220,13 +220,6 @@
         "name": "htmlUrl",
         "label": "HTML File URL",
         "description": "DAM にアップロードした HTML ファイルのパスを記入してください。例: /content/dam/custom-embed/html/recruit.html"
-      },
-      {
-        "component": "textarea",
-        "valueType": "string",
-        "name": "resourceUrls",
-        "label": "Resource URLs",
-        "description": "読み込む CSS / JS ファイルの DAM パスを1行1つで記入してください。拡張子 .css は stylesheet、.js は script として自動判定されます。例: /content/dam/sumitclub/eds/css/common.css"
       }
     ]
   },
