@@ -65,18 +65,16 @@ async function executeScripts(container, baseUrl) {
     await prev;
     const next = document.createElement('script');
     [...old.attributes].forEach((a) => {
-      if (a.name === 'src') {
-        next.src = toAbsolute(a.value, baseUrl);
-      } else {
-        next.setAttribute(a.name, a.value);
-      }
+      next.setAttribute(a.name, a.name === 'src' ? toAbsolute(a.value, baseUrl) : a.value);
     });
-    if (!old.getAttribute('src')) {
-      next.textContent = old.textContent;
-    } else {
+    if (old.getAttribute('src')) {
+      next.src = toAbsolute(old.getAttribute('src'), baseUrl);
+      old.replaceWith(next); // DOM に追加してからロードを待つ
       await loadElement(next).catch(() => {});
+    } else {
+      next.textContent = old.textContent;
+      old.replaceWith(next);
     }
-    old.replaceWith(next);
   }, Promise.resolve());
 }
 
@@ -87,18 +85,39 @@ function rewriteImageSrcs(container, baseUrl) {
   });
 }
 
+/**
+ * cell の内容から生の HTML 文字列を取得する。
+ *
+ * aem.js の wrapTextNodes() は text フィールドのテキストノードを <p> で包むため、
+ * cell.firstElementChild が null でなくなる。その場合も cell.textContent で
+ * 元の HTML 文字列を取得する必要がある。
+ *
+ * 判定ルール:
+ *   - 子要素が <p> 1つだけ、かつその <p> の子がテキストノード 1つだけ
+ *     → wrapTextNodes が text フィールドのテキストを包んだケース → textContent を使用
+ *   - 子要素なし → 素のテキストノード → textContent を使用
+ *   - それ以外 → richtext や直接記述の HTML 要素 → innerHTML を使用
+ */
+function extractRawHtml(cell) {
+  const { firstElementChild: first } = cell;
+  if (!first) return cell.textContent.trim();
+  if (
+    cell.children.length === 1
+    && first.tagName === 'P'
+    && first.childNodes.length === 1
+    && first.firstChild.nodeType === Node.TEXT_NODE
+  ) {
+    return cell.textContent.trim();
+  }
+  return cell.innerHTML;
+}
+
 export default async function decorate(block) {
   const cell = block.querySelector(':scope > div > div');
   if (!cell) return;
 
   const baseUrl = getAemBaseUrl();
-
-  // text フィールド型 (UE での推奨): JCR の文字列値がHTMLエスケープされてテキストノードに入る
-  //   → cell.textContent で生の HTML 文字列を取得する
-  // richtext フィールド型 / テスト HTML で直書きした場合: セルに実際の DOM 要素がある
-  //   → cell.innerHTML で HTML 文字列を取得する
-  const hasElements = cell.firstElementChild !== null;
-  const rawHtml = hasElements ? cell.innerHTML : cell.textContent;
+  const rawHtml = extractRawHtml(cell);
 
   block.innerHTML = '';
 
