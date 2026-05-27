@@ -84,25 +84,31 @@ async function runScripts(headScripts, bodyScripts, baseUrl) {
 
 /**
  * cell[0] の内容を解決して HTML 文字列を返す。
- *   - .html で終わる単一行  → DAM ファイルを fetch（Cloud モード）
+ *   - .html で終わる単一行 または <a href> → DAM ファイルを fetch（Cloud モード）
  *   - それ以外              → cell の innerHTML をそのまま使用（ローカルテストフォールバック）
+ *
+ * EDS は text フィールドの値を <a href="..."> として描画する場合があるため、
+ * <a> 要素の href 属性からパスを取得する。
  */
 async function resolveHtml(htmlCell, baseUrl) {
-  const text = htmlCell.textContent.trim();
-  if (text && !text.includes('\n') && text.endsWith('.html')) {
-    const url = toAbsolute(text, baseUrl);
+  // EDS が <a href="/content/dam/.../recruit.html"> として描画した場合
+  const anchor = htmlCell.querySelector('a[href]');
+  const rawPath = anchor ? anchor.getAttribute('href') : htmlCell.textContent.trim();
+
+  if (rawPath && !rawPath.includes('\n') && rawPath.endsWith('.html')) {
+    const url = toAbsolute(rawPath, baseUrl);
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`custom-embed: fetch failed ${resp.status} ${url}`);
     return resp.text();
   }
   const { firstElementChild: first } = htmlCell;
-  if (!first) return text;
+  if (!first) return htmlCell.textContent;
   if (
     htmlCell.children.length === 1
     && first.tagName === 'P'
     && first.childNodes.length === 1
     && first.firstChild.nodeType === Node.TEXT_NODE
-  ) return text;
+  ) return htmlCell.textContent;
   return htmlCell.innerHTML;
 }
 

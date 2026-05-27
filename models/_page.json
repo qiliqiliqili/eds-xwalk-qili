@@ -23,6 +23,13 @@
           "label": "Keywords"
         },
         {
+          "component": "text",
+          "valueType": "string",
+          "name": "aem-base-url",
+          "label": "AEM Base URL",
+          "description": "DAM アセットを配信する AEM Publish の URL。例: https://publish-p1234-e5678.adobeaemcloud.com"
+        },
+        {
           "component": "select",
           "valueType": "string",
           "name": "hide-header",
