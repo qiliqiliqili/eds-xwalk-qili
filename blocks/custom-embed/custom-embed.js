@@ -92,7 +92,14 @@ export default async function decorate(block) {
   if (!cell) return;
 
   const baseUrl = getAemBaseUrl();
-  const rawHtml = cell.innerHTML;
+
+  // text フィールド型 (UE での推奨): JCR の文字列値がHTMLエスケープされてテキストノードに入る
+  //   → cell.textContent で生の HTML 文字列を取得する
+  // richtext フィールド型 / テスト HTML で直書きした場合: セルに実際の DOM 要素がある
+  //   → cell.innerHTML で HTML 文字列を取得する
+  const hasElements = cell.firstElementChild !== null;
+  const rawHtml = hasElements ? cell.innerHTML : cell.textContent;
+
   block.innerHTML = '';
 
   const parser = new DOMParser();

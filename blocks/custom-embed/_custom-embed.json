@@ -21,7 +21,7 @@
       "id": "custom-embed",
       "fields": [
         {
-          "component": "richtext",
+          "component": "text",
           "valueType": "string",
           "name": "htmlContent",
           "label": "HTML Content",
