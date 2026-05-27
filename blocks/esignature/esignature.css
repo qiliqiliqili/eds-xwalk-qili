@@ -1,0 +1,290 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Esignature Block — PDF flipbook with CSS 3-D page-turn animation.
+   The JS reads --esig-page-w / --esig-page-h to size the canvases,
+   so always keep those vars in sync with the layout below.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Design tokens + Block wrapper ──────────────────────────────────────── */
+.esignature {
+  --esig-page-w: 600px;   /* width of ONE page — overridden by JS at runtime */
+  --esig-page-h: 849px;   /* 600 × √2 ≈ 849 */
+  --esig-spine-w: 14px;
+  --esig-bg: #e8e2d8;
+  --esig-shadow: rgb(0 0 0 / 35%);
+  --esig-accent: #8b6f47;
+  --esig-flip-dur: 650ms; /* must match FLIP_MS in JS */
+  --esig-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 16px 56px;
+  background: var(--esig-bg);
+  min-height: calc(var(--esig-page-h) + 120px);
+}
+
+/* ── Book container (provides perspective for 3-D) ───────────────────────── */
+.esig-book {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  perspective: 2400px;
+  perspective-origin: 50% 40%;
+  outline: none;
+}
+
+.esig-book:focus-visible {
+  outline: 2px solid var(--esig-accent);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+
+/* ── Open-book spread ────────────────────────────────────────────────────── */
+.esig-spread {
+  position: relative;
+  display: flex;
+  width: calc(var(--esig-page-w) * 2 + var(--esig-spine-w));
+  height: var(--esig-page-h);
+
+  /*
+   * box-shadow instead of filter:drop-shadow — the filter property creates a
+   * new stacking context that flattens transform-style:preserve-3d on children,
+   * which breaks backface-visibility on the flip faces and causes mirroring.
+   */
+  box-shadow:
+    0 24px 48px rgb(0 0 0 / 30%),
+    0 4px 8px rgb(0 0 0 / 18%);
+}
+
+/* ── Static page canvases ────────────────────────────────────────────────── */
+.esig-page-canvas {
+  display: block;
+
+  /* width/height set by JS via canvas.style.width/height */
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.esig-page-canvas-left {
+  border-radius: 3px 0 0 3px;
+  box-shadow: inset -6px 0 14px -6px rgb(0 0 0 / 14%);
+}
+
+.esig-page-canvas-right {
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset 6px 0 14px -6px rgb(0 0 0 / 10%);
+}
+
+.esig-page-canvas-hidden {
+  visibility: hidden;
+}
+
+/* ── Spine ───────────────────────────────────────────────────────────────── */
+.esig-spine {
+  flex: 0 0 var(--esig-spine-w);
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    #b8a882 0%,
+    #d4c4a8 30%,
+    #e8d8c0 60%,
+    #c8b89a 100%
+  );
+  box-shadow:
+    2px 0 6px rgb(0 0 0 / 14%),
+    -2px 0 6px rgb(0 0 0 / 10%);
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+/* ── Flip element — the 3-D page that animates ───────────────────────────── */
+.esig-flip {
+  position: absolute;
+  top: 0;
+
+  /* Anchored at the spine — right half starts here */
+  left: calc(var(--esig-page-w) + var(--esig-spine-w));
+  width: var(--esig-page-w);
+  height: var(--esig-page-h);
+  transform-origin: left center; /* rotate around the spine edge */
+  transform-style: preserve-3d;
+  z-index: 20;
+
+  /* Hidden when not flipping; toggled by .esig-flip-active */
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.esig-flip.esig-flip-active {
+  visibility: visible;
+  pointer-events: none;
+}
+
+/* Faces */
+.esig-flip-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  backface-visibility: hidden;
+  background: #fff;
+
+  /* width/height set by JS */
+}
+
+.esig-flip-face-front {
+  /* Faces the viewer at rotateY(0deg) — shows the current right page */
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset 6px 0 14px -6px rgb(0 0 0 / 10%);
+}
+
+.esig-flip-face-back {
+  /* Pre-rotated 180deg; faces the viewer at rotateY(-180deg) */
+  transform: rotateY(180deg);
+  border-radius: 3px 0 0 3px;
+  box-shadow: inset -6px 0 14px -6px rgb(0 0 0 / 14%);
+}
+
+/* ── Forward flip animation (0deg → -180deg) ─────────────────────────────── */
+.esig-flip-forward {
+  animation: esig-forward var(--esig-flip-dur) var(--esig-ease) forwards;
+}
+
+@keyframes esig-forward {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(-180deg); }
+}
+
+/* ── Backward flip (start at -180deg, animate to 0deg) ───────────────────── */
+.esig-flip-flipped {
+  /* JS sets this class BEFORE the backward animation to place the element
+     over the left half. No transition here — it's an instant snap. */
+  transform: rotateY(-180deg);
+}
+
+.esig-flip-backward {
+  animation: esig-backward var(--esig-flip-dur) var(--esig-ease) forwards;
+}
+
+@keyframes esig-backward {
+  0%   { transform: rotateY(-180deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+/* ── Loading indicator ───────────────────────────────────────────────────── */
+.esig-loading-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(248 245 240 / 88%);
+  border-radius: 3px;
+  z-index: 30;
+}
+
+.esig-loading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.esig-loading-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--esig-accent);
+  animation: esig-pulse 1.2s ease-in-out infinite;
+}
+
+.esig-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.esig-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes esig-pulse {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Error message ───────────────────────────────────────────────────────── */
+.esig-error {
+  color: #c0392b;
+  font-size: 0.9rem;
+  padding: 12px 16px;
+  background: #fdf3f2;
+  border: 1px solid #e8c4c0;
+  border-radius: 4px;
+}
+
+/* ── Navigation bar ──────────────────────────────────────────────────────── */
+.esig-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.esig-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--esig-accent);
+  background: transparent;
+  color: var(--esig-accent);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+  padding: 0;
+}
+
+.esig-nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.esig-nav-btn:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.esig-nav-btn:focus-visible {
+  outline: 2px solid var(--esig-accent);
+  outline-offset: 3px;
+}
+
+.esig-nav-btn:hover:not(:disabled) {
+  background: var(--esig-accent);
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.esig-nav-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.esig-nav-indicator {
+  font-size: 0.85rem;
+  color: #555;
+  min-width: 80px;
+  text-align: center;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (width <= 600px) {
+  .esignature {
+    padding: 20px 8px 28px;
+  }
+}

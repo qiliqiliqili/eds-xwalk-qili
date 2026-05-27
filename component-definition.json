@@ -11,9 +11,7 @@
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/text/v1/text",
-                "template": {
-                  "model": "text"
-                }
+                "template": {}
               }
             }
           }
@@ -130,6 +128,21 @@
           }
         },
         {
+          "title": "Custom Embed",
+          "id": "custom-embed",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Custom Embed",
+                  "model": "custom-embed"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Diners Breadcrumb",
           "id": "diners-breadcrumb",
           "plugins": {
@@ -153,6 +166,21 @@
                 "template": {
                   "name": "Diners Revo",
                   "models": "diners-revo"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Esignature",
+          "id": "esignature",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Esignature",
+                  "model": "esignature"
                 }
               }
             }

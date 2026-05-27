@@ -56,22 +56,6 @@
     ]
   },
   {
-    "id": "text",
-    "fields": [
-      {
-        "component": "multiselect",
-        "name": "style",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Center",
-            "value": "center"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "image",
     "fields": [
       {
@@ -184,10 +168,6 @@
           {
             "name": "Highlight",
             "value": "highlight"
-          },
-          {
-            "name": "Center",
-            "value": "center"
           }
         ]
       }
@@ -232,6 +212,18 @@
     ]
   },
   {
+    "id": "custom-embed",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "htmlContent",
+        "label": "HTML Content",
+        "description": "Classic AEM コンポーネントのHTMLをそのまま貼り付けてください。<link>/<script>タグを含むHTMLも記載可能です。"
+      }
+    ]
+  },
+  {
     "id": "diners-breadcrumb",
     "fields": []
   },
@@ -243,6 +235,18 @@
         "name": "title",
         "label": "Title",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "esignature",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "source",
+        "label": "PDF Document",
+        "multi": false
       }
     ]
   },

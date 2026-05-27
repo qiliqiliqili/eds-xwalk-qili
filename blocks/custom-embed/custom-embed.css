@@ -1,0 +1,15 @@
+/* Override EDS section max-width so full-width layouts from embedded HTML render correctly */
+main > .section > .custom-embed-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-embed.block {
+  padding: 0;
+  margin: 0;
+}
+
+.custom-embed-content {
+  width: 100%;
+}
