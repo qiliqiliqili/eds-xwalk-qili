@@ -219,7 +219,14 @@
         "valueType": "string",
         "name": "htmlContent",
         "label": "HTML Content",
-        "description": "Classic AEM コンポーネントのHTMLをそのまま貼り付けてください。<link>/<script>タグを含むHTMLも記載可能です。"
+        "description": "Classic AEM の HTML 本文を貼り付けてください（<link>/<script> タグは除く。それらは下の Resource URLs フィールドに記入してください）。"
+      },
+      {
+        "component": "textarea",
+        "valueType": "string",
+        "name": "resourceUrls",
+        "label": "Resource URLs",
+        "description": "読み込む CSS / JS ファイルの DAM パスを1行1つで記入してください。拡張子 .css は stylesheet、.js は script として自動判定されます。例: /content/dam/sumitclub/eds/css/common.css"
       }
     ]
   },

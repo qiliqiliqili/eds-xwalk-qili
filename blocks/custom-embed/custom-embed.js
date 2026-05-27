@@ -2,39 +2,29 @@
  * Custom Embed block — renders raw HTML pasted by an author.
  *
  * Authoring (Universal Editor):
- *   1. Add the "Custom Embed" block to a page.
- *   2. In the "HTML Content" field, paste the raw HTML snippet.
- *      HTML には <link>, <style>, <script> タグを含めることができます。
- *   3. CSS/JS/img のパスは /content/dam/... の root-relative 形式で記述します。
- *      ブロックが自動的に aem-base-url メタデータのホスト名を付与します。
+ *   1. "HTML Content" フィールド: Classic AEM の HTML 本文を貼り付ける
+ *      （<link>/<script> タグは EDS が除去するため、このフィールドには入れない）
+ *   2. "Resource URLs" フィールド: 読み込む CSS/JS の DAM パスを1行1つで記入
+ *      例:
+ *        /content/dam/sumitclub/eds/css/module_v2.css
+ *        /content/dam/sumitclub/eds/js/jquery.min.js
  *
- * ページメタデータに aem-base-url を設定することで環境を切り替えられます:
- *   テスト: <meta name="aem-base-url" content="https://publish-p1234-e5678.adobeaemcloud.com">
- *   本番:   <meta name="aem-base-url" content="https://www.sumitclub.jp">
- *
- * メタデータが未設定の場合は現在のページの origin を使用します。
+ * ページメタデータ "aem-base-url" でベース URL を設定します:
+ *   テスト: https://publish-p1234-e5678.adobeaemcloud.com
+ *   本番:   https://www.sumitclub.jp
+ * 未設定の場合は window.location.origin を使用します。
  */
 
-/**
- * ページの <meta name="aem-base-url"> からベース URL を取得する。
- * 未設定なら window.location.origin を返す。
- */
 function getAemBaseUrl() {
   const meta = document.head.querySelector('meta[name="aem-base-url"]');
   const raw = meta ? meta.content : window.location.origin;
-  return raw.replace(/\/$/, ''); // 末尾スラッシュを除去
+  return raw.replace(/\/$/, '');
 }
 
-/**
- * /content/dam/... や /etc.clientlibs/... などの root-relative パスに
- * AEM ベース URL を付与して絶対 URL に変換する。
- * すでに絶対 URL (http/https) または相対パス (./) はそのまま返す。
- */
 function toAbsolute(path, baseUrl) {
   if (!path) return path;
-  if (/^https?:\/\//i.test(path)) return path; // すでに絶対URL
-  if (path.startsWith('/')) return `${baseUrl}${path}`; // /content/dam/... 形式
-  // ./relative パスは DOMParser の about:blank 問題を回避して page base で解決
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path.startsWith('/')) return `${baseUrl}${path}`;
   try { return new URL(path, document.baseURI).href; } catch { return path; }
 }
 
@@ -69,7 +59,7 @@ async function executeScripts(container, baseUrl) {
     });
     if (old.getAttribute('src')) {
       next.src = toAbsolute(old.getAttribute('src'), baseUrl);
-      old.replaceWith(next); // DOM に追加してからロードを待つ
+      old.replaceWith(next);
       await loadElement(next).catch(() => {});
     } else {
       next.textContent = old.textContent;
@@ -78,7 +68,6 @@ async function executeScripts(container, baseUrl) {
   }, Promise.resolve());
 }
 
-/** img[src] の root-relative パスを絶対 URL に書き換える */
 function rewriteImageSrcs(container, baseUrl) {
   container.querySelectorAll('img[src]').forEach((img) => {
     img.src = toAbsolute(img.getAttribute('src'), baseUrl);
@@ -86,19 +75,12 @@ function rewriteImageSrcs(container, baseUrl) {
 }
 
 /**
- * cell の内容から生の HTML 文字列を取得する。
- *
- * aem.js の wrapTextNodes() は text フィールドのテキストノードを <p> で包むため、
- * cell.firstElementChild が null でなくなる。その場合も cell.textContent で
- * 元の HTML 文字列を取得する必要がある。
- *
- * 判定ルール:
- *   - 子要素が <p> 1つだけ、かつその <p> の子がテキストノード 1つだけ
- *     → wrapTextNodes が text フィールドのテキストを包んだケース → textContent を使用
- *   - 子要素なし → 素のテキストノード → textContent を使用
- *   - それ以外 → richtext や直接記述の HTML 要素 → innerHTML を使用
+ * aem.js の wrapTextNodes() はテキストノードを <p> で包むため、
+ * cell.firstElementChild が null でなくなる場合がある。
+ * 単一 <p> + 単一テキストノードのパターンは wrapTextNodes による包みと判定し
+ * cell.textContent を返す（元の文字列を復元できる）。
  */
-function extractRawHtml(cell) {
+function extractRawText(cell) {
   const { firstElementChild: first } = cell;
   if (!first) return cell.textContent.trim();
   if (
@@ -112,39 +94,67 @@ function extractRawHtml(cell) {
   return cell.innerHTML;
 }
 
+/**
+ * Resource URLs フィールド（1行1パス）から CSS/JS URL を読み込む。
+ * EDS 配信が <link>/<script> タグを除去するため、パスをプレーンテキストで格納する。
+ */
+async function loadResources(urlsCell, baseUrl) {
+  if (!urlsCell) return;
+  const raw = extractRawText(urlsCell);
+  const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+  const scripts = [];
+  lines.forEach((line) => {
+    const url = toAbsolute(line, baseUrl);
+    if (line.endsWith('.css')) {
+      injectStylesheet(url);
+    } else if (line.endsWith('.js')) {
+      scripts.push(url);
+    }
+  });
+  await scripts.reduce(async (prev, src) => {
+    await prev;
+    const script = document.createElement('script');
+    script.src = src;
+    document.head.appendChild(script);
+    await loadElement(script).catch(() => {});
+  }, Promise.resolve());
+}
+
 export default async function decorate(block) {
-  const cell = block.querySelector(':scope > div > div');
-  if (!cell) return;
+  const cells = [...block.querySelectorAll(':scope > div > div')];
+  const htmlCell = cells[0];
+  const urlsCell = cells[1];
+  if (!htmlCell) return;
 
   const baseUrl = getAemBaseUrl();
-  const rawHtml = extractRawHtml(cell);
 
+  // Resource URLs フィールドから CSS/JS を先に読み込む
+  await loadResources(urlsCell, baseUrl);
+
+  const rawHtml = extractRawText(htmlCell);
   block.innerHTML = '';
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(rawHtml, 'text/html');
 
-  // <link rel="stylesheet"> → document <head> に注入 (root-relative → 絶対 URL)
+  // HTML 内に残っている <link rel="stylesheet"> があれば注入
   doc.querySelectorAll('link[rel="stylesheet"]').forEach((el) => {
     const href = toAbsolute(el.getAttribute('href'), baseUrl);
     if (href) injectStylesheet(href);
   });
 
-  // <style> → document <head> に注入
+  // <style> タグがあれば注入
   doc.querySelectorAll('style').forEach((el) => {
     injectInlineStyle(el.textContent);
   });
 
-  // コンテンツ HTML をラッパーに挿入
   const wrapper = document.createElement('div');
   wrapper.className = 'custom-embed-content';
   wrapper.innerHTML = doc.body.innerHTML;
 
-  // img src を絶対 URL に変換
   rewriteImageSrcs(wrapper, baseUrl);
-
   block.appendChild(wrapper);
 
-  // <script> を再生成して実行
+  // HTML 内に残っている <script> があれば実行
   await executeScripts(wrapper, baseUrl);
 }
