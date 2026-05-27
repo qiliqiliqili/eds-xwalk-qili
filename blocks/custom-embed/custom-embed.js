@@ -100,7 +100,8 @@ function extractRawText(cell) {
  */
 async function loadResources(urlsCell, baseUrl) {
   if (!urlsCell) return;
-  const raw = extractRawText(urlsCell);
+  // textContent を使うことで EDS が <p> や <br> で囲んでも純粋なパス文字列を取得できる
+  const raw = urlsCell.textContent;
   const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
   const scripts = [];
   lines.forEach((line) => {
