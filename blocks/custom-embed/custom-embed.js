@@ -118,7 +118,14 @@ export default async function decorate(block) {
   if (!htmlCell) return;
 
   const baseUrl = getAemBaseUrl();
-  const rawHtml = await resolveHtml(htmlCell, baseUrl);
+  let rawHtml;
+  try {
+    rawHtml = await resolveHtml(htmlCell, baseUrl);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('failed to load module for custom-embed', err);
+    return;
+  }
   block.innerHTML = '';
 
   const parser = new DOMParser();
