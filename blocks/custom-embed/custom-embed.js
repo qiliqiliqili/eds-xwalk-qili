@@ -26,11 +26,14 @@ function toAbsolute(path, baseUrl) {
 }
 
 function injectStylesheet(href) {
-  if (!href || document.head.querySelector(`link[href="${href}"]`)) return;
+  if (!href) return null;
+  const existing = document.head.querySelector(`link[href="${href}"]`);
+  if (existing) return null;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = href;
   document.head.appendChild(link);
+  return link;
 }
 
 function injectInlineStyle(cssText) {
@@ -131,20 +134,29 @@ export default async function decorate(block) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(rawHtml, 'text/html');
 
-  // <link rel="stylesheet"> / <style> を head から注入
+  // <link rel="stylesheet"> / <style> を head から注入、ロード完了を追跡
+  const stylePromises = [];
   doc.querySelectorAll('link[rel="stylesheet"]').forEach((el) => {
-    injectStylesheet(toAbsolute(el.getAttribute('href'), baseUrl));
+    const link = injectStylesheet(toAbsolute(el.getAttribute('href'), baseUrl));
+    if (link) stylePromises.push(loadElement(link).catch(() => {}));
   });
   doc.querySelectorAll('style').forEach((el) => {
     injectInlineStyle(el.textContent);
   });
 
-  // body を描画
+  // body を描画（CSS ロード前は非表示）
   const wrapper = document.createElement('div');
   wrapper.className = 'custom-embed-content';
+  wrapper.style.opacity = '0';
+  wrapper.style.transition = 'opacity 0.2s ease';
   wrapper.innerHTML = doc.body.innerHTML;
   rewriteImageSrcs(wrapper, baseUrl);
   block.appendChild(wrapper);
+
+  // CSS がすべてロードされてから表示
+  Promise.all(stylePromises).then(() => {
+    wrapper.style.opacity = '1';
+  });
 
   // head の <script> → body の <script> の順に実行
   const headScripts = [...doc.head.querySelectorAll('script')];
