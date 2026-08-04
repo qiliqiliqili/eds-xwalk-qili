@@ -181,14 +181,32 @@
     ]
   },
   {
+    "id": "auto-tab",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Tab Label",
+        "description": "Consecutive Section Tab sections are combined client-side into a single Tabs block. This becomes the tab's clickable label."
+      }
+    ]
+  },
+  {
     "id": "accordion-item",
     "fields": [
       {
         "component": "text",
         "valueType": "string",
-        "name": "accordionHeading",
-        "label": "Accordion Title",
-        "description": "Consecutive Accordion Item sections are combined client-side into a single accordion widget. This becomes the clickable header text."
+        "name": "heading",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "body",
+        "value": "",
+        "label": "Body"
       }
     ]
   },

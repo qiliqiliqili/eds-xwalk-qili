@@ -77,15 +77,15 @@
           }
         },
         {
-          "title": "Accordion Item",
-          "id": "accordion-item",
+          "title": "Section Tab",
+          "id": "auto-tab",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/section/v1/section",
                 "template": {
-                  "name": "Accordion Item",
-                  "model": "accordion-item",
+                  "name": "Section Tab",
+                  "model": "auto-tab",
                   "filter": "section"
                 }
               }
@@ -98,6 +98,36 @@
       "title": "Blocks",
       "id": "blocks",
       "components": [
+        {
+          "title": "Accordion",
+          "id": "accordion",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Accordion",
+                  "filter": "accordion"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Accordion Item",
+          "id": "accordion-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Accordion Item",
+                  "model": "accordion-item"
+                }
+              }
+            }
+          }
+        },
         {
           "title": "Cards",
           "id": "cards",

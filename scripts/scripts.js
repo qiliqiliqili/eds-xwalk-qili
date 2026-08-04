@@ -5,10 +5,12 @@ import {
   decorateIcons,
   decorateSections,
   decorateBlocks,
+  decorateBlock,
   decorateTemplateAndTheme,
   waitForFirstImage,
   loadSection,
   loadSections,
+  loadBlock,
   loadCSS,
   getMetadata,
   buildBlock,
@@ -92,65 +94,85 @@ function buildAutoBlocks(main) {
 }
 
 /**
- * Reads an "Accordion Item" section's header text from its section metadata.
- * The model field is named `accordionHeading` (its label is "Accordion
- * Title"), and it isn't fully documented whether AEM renders the section
- * metadata table's key column from a field's `name` or its `label` — so
- * both possible resulting dataset keys are checked here.
- * @param {Element} section a decorated section element
- * @returns {string|undefined} the header text, if this is an Accordion Item
+ * Finds blocks freely nested inside auto-blocked section content (e.g. a
+ * Cards block placed inside a "Section Tab") and loads them. They sit
+ * deeper than the single global decorateBlocks() pass in aem.js reaches (it
+ * only scans `main > div.section > div > div`), so they arrive un-decorated.
+ * @param {Element} container the container to scan
  */
-function getAccordionHeading(section) {
-  return section.dataset.accordionHeading ?? section.dataset.accordionTitle;
+async function decorateNestedBlocks(container) {
+  const blocks = [...container.querySelectorAll(':scope > div > div')]
+    .filter((el) => el.className);
+  blocks.forEach(decorateBlock);
+  await Promise.all(blocks.map(loadBlock));
 }
 
 /**
- * Combines consecutive top-level "Accordion Item" sections into a single
- * accordion block. A Block cannot directly contain a Section in EDS's
- * content model (only one level of nesting is allowed: main > section >
- * default-content/blocks), so composite widgets like accordions and tabs
+ * Combines consecutive top-level "Section Tab" sections into a single tabs
+ * block, following the exact pattern from aem.live's "Content modeling for
+ * AEM authoring projects": a Block cannot directly contain a Section in
+ * EDS's content model (only one level of nesting is allowed: main > section
+ * > default-content/blocks), so composite widgets like tabs and accordions
  * that need freely-authored content per item have to be modelled as
- * sections and combined client-side via auto-blocking — this is the
- * officially documented pattern (see aem.live "Content modeling for AEM
- * authoring projects").
+ * sections and combined client-side via auto-blocking. This mirrors the
+ * documentation's own "Tab" example (resourceType
+ * core/franklin/components/section/v1/section, template.filter: "section"),
+ * renamed to "Section Tab" only to avoid an id clash with the Tabs block's
+ * own "tab" item.
  *
- * Each "Accordion Item" section carries its header text as section
- * metadata: authoring the "Accordion Title" field renders a
- * `div.section-metadata` block inside the section, which decorateSections()
- * (called just before this function) turns into a `section.dataset` entry
- * and strips it from the DOM. This function must therefore run after
- * decorateSections() but before decorateBlocks(), so the newly assembled
- * `.accordion` block still gets picked up by the normal block-loading flow.
+ * The resulting markup exactly matches what the Tabs block
+ * (blocks/tabs/tabs.js) expects from a manually-authored "Tab" item — one
+ * row per section, with a label cell and a content cell — so the same
+ * `.tabs` block class is used and no separate rendering code is needed:
+ * two different authoring paths (placing a "Tabs" block by hand, or writing
+ * consecutive "Section Tab" sections) converge on the same block.
+ *
+ * The "Section Tab" marker and its label come from the section's own model
+ * field ("Tab Label"), which AEM appends to the section as metadata;
+ * decorateSections() (called just before this function) turns that into
+ * `section.dataset` entries. Must run after decorateSections() but before
+ * decorateBlocks(), so the newly assembled `.tabs` block still gets picked
+ * up by the normal block-loading flow.
  * @param {Element} main The container element
  */
-function buildAccordionBlocks(main) {
+function buildSectionTabsBlocks(main) {
+  const getLabel = (section) => section.dataset.tabLabel ?? section.dataset.label;
+
   const sections = [...main.querySelectorAll(':scope > div.section')];
   let i = 0;
   while (i < sections.length) {
-    if (getAccordionHeading(sections[i]) === undefined) {
+    if (getLabel(sections[i]) === undefined) {
       i += 1;
       // eslint-disable-next-line no-continue
       continue;
     }
 
     const group = [];
-    while (i < sections.length && getAccordionHeading(sections[i]) !== undefined) {
+    while (i < sections.length && getLabel(sections[i]) !== undefined) {
       group.push(sections[i]);
       i += 1;
     }
 
-    const accordion = document.createElement('div');
-    accordion.className = 'accordion';
+    const tabs = document.createElement('div');
+    tabs.className = 'tabs';
     group.forEach((section) => {
       const row = document.createElement('div');
-      const header = document.createElement('div');
-      header.className = 'accordion-item-header';
-      header.textContent = getAccordionHeading(section);
-      const body = document.createElement('div');
-      body.className = 'accordion-item-body';
-      body.append(...section.childNodes);
-      row.append(header, body);
-      accordion.append(row);
+      const label = document.createElement('div');
+      // Non-empty classNames protect these cells from aem.js's wrapTextNodes(),
+      // which otherwise treats an un-classed cell containing a nested block
+      // (e.g. a Cards block placed inside this Section Tab) as a plain text
+      // cell and corrupts it. tabs.js overwrites both classNames anyway.
+      label.className = 'tabs-tab-raw';
+      label.textContent = getLabel(section);
+      const content = document.createElement('div');
+      content.className = 'tabs-panel-raw';
+      content.append(...section.childNodes);
+      decorateNestedBlocks(content).catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to decorate a block nested in a Section Tab', error);
+      });
+      row.append(label, content);
+      tabs.append(row);
     });
 
     const replacement = document.createElement('div');
@@ -158,7 +180,7 @@ function buildAccordionBlocks(main) {
     replacement.dataset.sectionStatus = 'initialized';
     replacement.style.display = 'none';
     const wrapper = document.createElement('div');
-    wrapper.append(accordion);
+    wrapper.append(tabs);
     replacement.append(wrapper);
 
     group[0].replaceWith(replacement);
@@ -208,7 +230,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
-  buildAccordionBlocks(main);
+  buildSectionTabsBlocks(main);
   decorateBlocks(main);
   decorateMagazineCaptions(main);
 }

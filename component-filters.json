@@ -3,7 +3,7 @@
     "id": "main",
     "components": [
       "section",
-      "accordion-item"
+      "auto-tab"
     ]
   },
   {
@@ -20,8 +20,15 @@
       "esignature",
       "fragment",
       "dn-revo",
+      "accordion",
       "tabs",
       "carousel"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion-item"
     ]
   },
   {

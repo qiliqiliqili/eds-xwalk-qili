@@ -15,15 +15,15 @@
       }
     },
     {
-      "title": "Accordion Item",
-      "id": "accordion-item",
+      "title": "Section Tab",
+      "id": "auto-tab",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/section/v1/section",
             "template": {
-              "name": "Accordion Item",
-              "model": "accordion-item",
+              "name": "Section Tab",
+              "model": "auto-tab",
               "filter": "section"
             }
           }
@@ -55,14 +55,14 @@
       ]
     },
     {
-      "id": "accordion-item",
+      "id": "auto-tab",
       "fields": [
         {
           "component": "text",
           "valueType": "string",
-          "name": "accordionHeading",
-          "label": "Accordion Title",
-          "description": "Consecutive Accordion Item sections are combined client-side into a single accordion widget. This becomes the clickable header text."
+          "name": "label",
+          "label": "Tab Label",
+          "description": "Consecutive Section Tab sections are combined client-side into a single Tabs block. This becomes the tab's clickable label."
         }
       ]
     }
@@ -82,6 +82,7 @@
         "esignature",
         "fragment",
         "dn-revo",
+        "accordion",
         "tabs",
         "carousel"
       ]

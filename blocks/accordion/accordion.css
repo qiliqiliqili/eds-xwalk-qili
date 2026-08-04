@@ -34,19 +34,12 @@
 
 .accordion-item-body {
   padding: 0 8px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
 
-.accordion-item-body > * {
-  margin: 0;
-}
-
-.accordion-item-body .default-content-wrapper > :first-child {
+.accordion-item-body p:first-child {
   margin-top: 0;
 }
 
-.accordion-item-body .default-content-wrapper > :last-child {
+.accordion-item-body p:last-child {
   margin-bottom: 0;
 }
