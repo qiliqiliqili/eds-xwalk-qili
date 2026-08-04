@@ -60,7 +60,7 @@
         {
           "component": "text",
           "valueType": "string",
-          "name": "title",
+          "name": "accordionHeading",
           "label": "Accordion Title",
           "description": "Consecutive Accordion Item sections are combined client-side into a single accordion widget. This becomes the clickable header text."
         }

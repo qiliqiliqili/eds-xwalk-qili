@@ -104,12 +104,25 @@
 3. **正しい修正: `accordion-item` を Block の子ではなく、トップレベルSectionの一種として再定義し、
    複数の連続Sectionを `buildAccordionBlocks()`（auto-blocking）でクライアントサイド結合する方式に変更。**
    これにより UE 上で通常のSection同様に「+」から自由にコンポーネント／ブロックを追加できるようになった。
+4. **誤り②: Accordion Item のモデルフィールド名に `title`（さらに応急修正で `accordionTitle`）を使ったところ、
+   UE上でタイトルが「[object Object]」と表示され、編集するとエラーになった。**
+   原因は xwalk の **フィールド名の予約サフィックス（Field Collapse）** — `Alt`/`Text`/`Title`/`Type`/`Mime Type`
+   で終わるフィールド名は「対応するベースフィールド（例: `link` + `linkTitle` → linkのtitle属性）に
+   自動的に折りたたまれる」という特殊な意味を持つため、対応するベースフィールドが存在しない
+   「孤立したcollapsibleフィールド」になっていたことだった（[公式ドキュメント](https://www.aem.live/developer/component-model-definitions)、
+   `eslint-plugin-xwalk` の `no-orphan-collapsible-fields` ルールが実際にこれを検出した）。
+   フィールド名を予約サフィックスに該当しない `accordionHeading` に変更して解消。
+   `label`（UI表示名）は "Accordion Title" のまま変更していない。
 - **副次的に見つかった実装バグ（`scripts/aem.js`）**: Cardsブロックを自由配置した際、
   `wrapTextNodes()`（`main.querySelectorAll('div.section > div > div')` という「ブロックは互いに
   ネストしない」前提のグローバル一括処理）が、ネストした `<div class="cards">` を誤って
   プレーンテキストのセルとみなし `<p class="cards">` に壊してしまう不具合が発生した。
   「セル自身が既に class を持っていればラップ済みとみなす」という防御条件を追加して解消
   （このガード自体にも `firstElementChild` が無いケースでの null 参照バグがあり、二段階で修正した）。
+- **未解明点**: 公式ドキュメントは Section Metadata のkey-valueテーブルの左列がフィールドの `label` と
+  `name` のどちらを使うか明記していない。そのため `buildAccordionBlocks()` は
+  `getAccordionHeading()` ヘルパーで `dataset.accordionHeading`（name基準）と
+  `dataset.accordionTitle`（label "Accordion Title" 基準）の両方をチェックする防御的実装にしている。
 
 ### 4. Accordion Block（新規実装）
 

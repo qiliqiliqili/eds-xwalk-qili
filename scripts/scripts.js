@@ -92,6 +92,19 @@ function buildAutoBlocks(main) {
 }
 
 /**
+ * Reads an "Accordion Item" section's header text from its section metadata.
+ * The model field is named `accordionHeading` (its label is "Accordion
+ * Title"), and it isn't fully documented whether AEM renders the section
+ * metadata table's key column from a field's `name` or its `label` — so
+ * both possible resulting dataset keys are checked here.
+ * @param {Element} section a decorated section element
+ * @returns {string|undefined} the header text, if this is an Accordion Item
+ */
+function getAccordionHeading(section) {
+  return section.dataset.accordionHeading ?? section.dataset.accordionTitle;
+}
+
+/**
  * Combines consecutive top-level "Accordion Item" sections into a single
  * accordion block. A Block cannot directly contain a Section in EDS's
  * content model (only one level of nesting is allowed: main > section >
@@ -104,8 +117,8 @@ function buildAutoBlocks(main) {
  * Each "Accordion Item" section carries its header text as section
  * metadata: authoring the "Accordion Title" field renders a
  * `div.section-metadata` block inside the section, which decorateSections()
- * (called just before this function) turns into `section.dataset.accordionTitle`
- * and strips from the DOM. This function must therefore run after
+ * (called just before this function) turns into a `section.dataset` entry
+ * and strips it from the DOM. This function must therefore run after
  * decorateSections() but before decorateBlocks(), so the newly assembled
  * `.accordion` block still gets picked up by the normal block-loading flow.
  * @param {Element} main The container element
@@ -114,14 +127,14 @@ function buildAccordionBlocks(main) {
   const sections = [...main.querySelectorAll(':scope > div.section')];
   let i = 0;
   while (i < sections.length) {
-    if (sections[i].dataset.accordionTitle === undefined) {
+    if (getAccordionHeading(sections[i]) === undefined) {
       i += 1;
       // eslint-disable-next-line no-continue
       continue;
     }
 
     const group = [];
-    while (i < sections.length && sections[i].dataset.accordionTitle !== undefined) {
+    while (i < sections.length && getAccordionHeading(sections[i]) !== undefined) {
       group.push(sections[i]);
       i += 1;
     }
@@ -132,7 +145,7 @@ function buildAccordionBlocks(main) {
       const row = document.createElement('div');
       const header = document.createElement('div');
       header.className = 'accordion-item-header';
-      header.textContent = section.dataset.accordionTitle;
+      header.textContent = getAccordionHeading(section);
       const body = document.createElement('div');
       body.className = 'accordion-item-body';
       body.append(...section.childNodes);
