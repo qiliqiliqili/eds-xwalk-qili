@@ -63,9 +63,20 @@
   ではなく `core/franklin/components/section/v1/section` に変更し、model はトップレベルSectionと共通の
   [models/_section.json](models/_section.json)（`section`）をそのまま再利用。filter は新設した
   `accordion-item`（Text/Image/Button/Title/Hero/Cards/Columns/Custom Embed/... を許可）。
+  **`template` に `"filter": "accordion-item"` を明示的に指定する必要がある**点が重要
+  （後述のUE検証で判明。トップレベルの `_section.json` に `filter` キーが無いのは、AEMがページ直下の
+  Section専用に特別扱いしているためで、Block内に置くカスタムのSection型コンポーネントでは
+  明示指定が必須。参考: [aem.live 公式ドキュメント](https://www.aem.live/developer/component-model-definitions)
+  に掲載されている `"resourceType": "core/franklin/components/section/v1/section"` +
+  `"template": {"model": "tab", "filter": "section"}` という実例と同じ書き方）。
 - **デモ場所**: [test/accordion-tabs-carousel-test.html](test/accordion-tabs-carousel-test.html) の
   「Item One」— 見出し(H3) + 段落 + **Cardsブロックを1つ自由に配置**した状態で正しく開閉・表示されることを確認済み。
-  UEでは Accordion Item を開いた際に「+」ボタンから任意のコンポーネント/ブロックを追加できる。
+  UEでは Accordion Item を選択した際に「+」ボタンから任意のコンポーネント/ブロックを追加できる。
+  - **実際にUEで発生した不具合と修正**: 最初の実装では `template` に `filter` キーを入れておらず、
+    UE上で Accordion Item を選択しても子コンポーネントを追加する「+」が機能しなかった
+    （`_section.json` のトップレベルSectionが `filter` キー無しで動いていたのを見て、
+    「idと同名のfilterが暗黙的に紐付く」と誤って一般化してしまったのが原因）。
+    `"filter": "accordion-item"` を明示追加して解消。
 - **説明**: `accordion-item` 内の**最初の子要素をクリック可能な見出し(summary)として扱い、残り全部を自由編集可能な本文**
   として扱う実装（[blocks/accordion/accordion.js](blocks/accordion/accordion.js)）。Tabs/Carouselの item型
   （固定フィールドしか持てない）とは対照的に、Accordion Item の中には Text・Image・Button だけでなく

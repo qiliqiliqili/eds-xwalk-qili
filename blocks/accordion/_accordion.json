@@ -24,7 +24,8 @@
             "resourceType": "core/franklin/components/section/v1/section",
             "template": {
               "name": "Accordion Item",
-              "model": "section"
+              "model": "section",
+              "filter": "accordion-item"
             }
           }
         }
