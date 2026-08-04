@@ -410,8 +410,13 @@ function wrapTextNodes(block) {
 
   block.querySelectorAll(':scope > div > div').forEach((blockColumn) => {
     if (blockColumn.hasChildNodes()) {
-      const hasWrapper = !!blockColumn.firstElementChild
-        && validWrappers.some((tagName) => blockColumn.firstElementChild.tagName === tagName);
+      // A classed cell (e.g. the root <div class="cards"> of a block nested
+      // freely inside a Section-type block item, such as accordion-item) is
+      // itself a component, never a plain field value, and must not be
+      // paragraph-wrapped.
+      const hasWrapper = !!blockColumn.className
+        || (!!blockColumn.firstElementChild
+          && validWrappers.some((tagName) => blockColumn.firstElementChild.tagName === tagName));
       if (!hasWrapper) {
         wrap(blockColumn);
       } else if (

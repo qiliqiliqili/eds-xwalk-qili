@@ -21,41 +21,38 @@
       "plugins": {
         "xwalk": {
           "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
+            "resourceType": "core/franklin/components/section/v1/section",
             "template": {
               "name": "Accordion Item",
-              "model": "accordion-item"
+              "model": "section"
             }
           }
         }
       }
     }
   ],
-  "models": [
-    {
-      "id": "accordion-item",
-      "fields": [
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "title",
-          "label": "Title"
-        },
-        {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "body",
-          "value": "",
-          "label": "Body"
-        }
-      ]
-    }
-  ],
+  "models": [],
   "filters": [
     {
       "id": "accordion",
       "components": [
         "accordion-item"
+      ]
+    },
+    {
+      "id": "accordion-item",
+      "components": [
+        "text",
+        "image",
+        "button",
+        "title",
+        "hero",
+        "cards",
+        "columns",
+        "custom-embed",
+        "esignature",
+        "fragment",
+        "dn-revo"
       ]
     }
   ]

@@ -31,6 +31,22 @@
     ]
   },
   {
+    "id": "accordion-item",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title",
+      "hero",
+      "cards",
+      "columns",
+      "custom-embed",
+      "esignature",
+      "fragment",
+      "dn-revo"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
