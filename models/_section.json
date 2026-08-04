@@ -13,6 +13,22 @@
           }
         }
       }
+    },
+    {
+      "title": "Accordion Item",
+      "id": "accordion-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/section/v1/section",
+            "template": {
+              "name": "Accordion Item",
+              "model": "accordion-item",
+              "filter": "section"
+            }
+          }
+        }
+      }
     }
   ],
   "models": [
@@ -37,6 +53,18 @@
           ]
         }
       ]
+    },
+    {
+      "id": "accordion-item",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "title",
+          "label": "Accordion Title",
+          "description": "Consecutive Accordion Item sections are combined client-side into a single accordion widget. This becomes the clickable header text."
+        }
+      ]
     }
   ],
   "filters": [
@@ -54,7 +82,6 @@
         "esignature",
         "fragment",
         "dn-revo",
-        "accordion",
         "tabs",
         "carousel"
       ]

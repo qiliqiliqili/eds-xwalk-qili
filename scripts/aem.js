@@ -420,7 +420,8 @@ function wrapTextNodes(block) {
       if (!hasWrapper) {
         wrap(blockColumn);
       } else if (
-        blockColumn.firstElementChild.tagName === 'PICTURE'
+        blockColumn.firstElementChild
+        && blockColumn.firstElementChild.tagName === 'PICTURE'
         && (blockColumn.children.length > 1 || !!blockColumn.textContent.trim())
       ) {
         wrap(blockColumn);

@@ -92,6 +92,68 @@ function buildAutoBlocks(main) {
 }
 
 /**
+ * Combines consecutive top-level "Accordion Item" sections into a single
+ * accordion block. A Block cannot directly contain a Section in EDS's
+ * content model (only one level of nesting is allowed: main > section >
+ * default-content/blocks), so composite widgets like accordions and tabs
+ * that need freely-authored content per item have to be modelled as
+ * sections and combined client-side via auto-blocking — this is the
+ * officially documented pattern (see aem.live "Content modeling for AEM
+ * authoring projects").
+ *
+ * Each "Accordion Item" section carries its header text as section
+ * metadata: authoring the "Accordion Title" field renders a
+ * `div.section-metadata` block inside the section, which decorateSections()
+ * (called just before this function) turns into `section.dataset.accordionTitle`
+ * and strips from the DOM. This function must therefore run after
+ * decorateSections() but before decorateBlocks(), so the newly assembled
+ * `.accordion` block still gets picked up by the normal block-loading flow.
+ * @param {Element} main The container element
+ */
+function buildAccordionBlocks(main) {
+  const sections = [...main.querySelectorAll(':scope > div.section')];
+  let i = 0;
+  while (i < sections.length) {
+    if (sections[i].dataset.accordionTitle === undefined) {
+      i += 1;
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const group = [];
+    while (i < sections.length && sections[i].dataset.accordionTitle !== undefined) {
+      group.push(sections[i]);
+      i += 1;
+    }
+
+    const accordion = document.createElement('div');
+    accordion.className = 'accordion';
+    group.forEach((section) => {
+      const row = document.createElement('div');
+      const header = document.createElement('div');
+      header.className = 'accordion-item-header';
+      header.textContent = section.dataset.accordionTitle;
+      const body = document.createElement('div');
+      body.className = 'accordion-item-body';
+      body.append(...section.childNodes);
+      row.append(header, body);
+      accordion.append(row);
+    });
+
+    const replacement = document.createElement('div');
+    replacement.className = 'section';
+    replacement.dataset.sectionStatus = 'initialized';
+    replacement.style.display = 'none';
+    const wrapper = document.createElement('div');
+    wrapper.append(accordion);
+    replacement.append(wrapper);
+
+    group[0].replaceWith(replacement);
+    group.slice(1).forEach((section) => section.remove());
+  }
+}
+
+/**
  * Adds .caption class to paragraphs that immediately follow an image
  * inside magazine article body sections.
  * Needed because EDS xwalk renders Image components as <p><picture>…</picture></p>,
@@ -133,6 +195,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
+  buildAccordionBlocks(main);
   decorateBlocks(main);
   decorateMagazineCaptions(main);
 }

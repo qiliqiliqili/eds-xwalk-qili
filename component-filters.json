@@ -2,7 +2,8 @@
   {
     "id": "main",
     "components": [
-      "section"
+      "section",
+      "accordion-item"
     ]
   },
   {
@@ -19,31 +20,8 @@
       "esignature",
       "fragment",
       "dn-revo",
-      "accordion",
       "tabs",
       "carousel"
-    ]
-  },
-  {
-    "id": "accordion",
-    "components": [
-      "accordion-item"
-    ]
-  },
-  {
-    "id": "accordion-item",
-    "components": [
-      "text",
-      "image",
-      "button",
-      "title",
-      "hero",
-      "cards",
-      "columns",
-      "custom-embed",
-      "esignature",
-      "fragment",
-      "dn-revo"
     ]
   },
   {

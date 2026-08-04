@@ -181,6 +181,18 @@
     ]
   },
   {
+    "id": "accordion-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Accordion Title",
+        "description": "Consecutive Accordion Item sections are combined client-side into a single accordion widget. This becomes the clickable header text."
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
