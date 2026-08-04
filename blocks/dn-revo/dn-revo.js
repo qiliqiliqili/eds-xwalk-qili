@@ -4,7 +4,7 @@
  * revolving payment page (リボルビング払い) with all its original assets.
  */
 
-const BLOCK_PATH = '/blocks/diners-revo';
+const BLOCK_PATH = '/blocks/dn-revo';
 
 function loadCSS(href) {
   return new Promise((resolve) => {
@@ -86,7 +86,7 @@ export default async function decorate(block) {
     if (!val) return;
     const filesIdx = val.indexOf(FILES_MARKER);
     if (filesIdx !== -1) {
-      // e.g. "./リボ..._files/logo.png" → "/blocks/diners-revo/assets/logo.png"
+      // e.g. "./リボ..._files/logo.png" → "/blocks/dn-revo/assets/logo.png"
       el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice(filesIdx + FILES_MARKER.length)}`);
     } else if (val.startsWith('./assets/')) {
       el.setAttribute(attr, `${BLOCK_PATH}/assets/${val.slice('./assets/'.length)}`);
@@ -106,7 +106,7 @@ export default async function decorate(block) {
 
   // Inject body content into block
   const wrapper = document.createElement('div');
-  wrapper.className = 'diners-revo-content';
+  wrapper.className = 'dn-revo-content';
   wrapper.innerHTML = doc.body.innerHTML;
   block.replaceChildren(wrapper);
 

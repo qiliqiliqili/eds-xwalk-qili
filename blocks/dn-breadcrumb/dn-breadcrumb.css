@@ -1,18 +1,18 @@
 /*
- * diners-breadcrumb block styles
+ * dn-breadcrumb block styles
  *
  * Matches the visual design of .dc__breadcrumb / .dc__foooter_description
  * from the original Diners Club site.
  */
 
 /* ── Wrapper ─────────────────────────────────────────────────── */
-.diners-breadcrumb {
+.dn-breadcrumb {
   padding: 1.2rem 0 0;
   background: transparent;
 }
 
 /* ── Breadcrumb list ─────────────────────────────────────────── */
-.diners-breadcrumb-nav ol {
+.dn-breadcrumb-nav ol {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -26,7 +26,7 @@
 }
 
 /* Separator "›" between items */
-.diners-breadcrumb-nav ol li + li::before {
+.dn-breadcrumb-nav ol li + li::before {
   content: "›";
   margin: 0 0.4em;
   color: #888;
@@ -34,27 +34,27 @@
 }
 
 /* Linked items */
-.diners-breadcrumb-nav ol li a {
+.dn-breadcrumb-nav ol li a {
   color: #004c97;
   text-decoration: none;
 }
 
-.diners-breadcrumb-nav ol li a:hover {
+.dn-breadcrumb-nav ol li a:hover {
   text-decoration: underline;
 }
 
 /* Current page — plain text, darker */
-.diners-breadcrumb-nav ol li[aria-current="page"] span {
+.dn-breadcrumb-nav ol li[aria-current="page"] span {
   color: #263033;
 }
 
 /* ── Description text ────────────────────────────────────────── */
-.diners-breadcrumb-description {
+.dn-breadcrumb-description {
   margin-top: 0.6rem;
   padding-bottom: 0.8rem;
 }
 
-.diners-breadcrumb-description p {
+.dn-breadcrumb-description p {
   margin: 0;
   font-size: 1.2rem;
   line-height: 1.6;
@@ -63,11 +63,11 @@
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (width <= 768px) {
-  .diners-breadcrumb-nav ol {
+  .dn-breadcrumb-nav ol {
     font-size: 1rem;
   }
 
-  .diners-breadcrumb-description p {
+  .dn-breadcrumb-description p {
     font-size: 1.1rem;
   }
 }

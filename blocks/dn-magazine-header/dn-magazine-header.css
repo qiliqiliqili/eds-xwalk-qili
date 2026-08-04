@@ -1,7 +1,7 @@
 /*
- * diners-magazine-header styles
+ * dn-magazine-header styles
  * ─────────────────────────────
- * The main header HTML and styles come from diners-revo/assets/ (module_v2.css etc.).
+ * The main header HTML and styles come from dn-revo/assets/ (module_v2.css etc.).
  * This file provides only:
  *   1. EDS reset overrides scoped to the header wrapper
  *   2. The fixed-position wrapper (.dmh-wrapper)

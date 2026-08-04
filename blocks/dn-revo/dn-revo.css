@@ -2,7 +2,7 @@
 
 /* Scoped styles to isolate from EDS page styles */
 
-.diners-revo-content {
+.dn-revo-content {
   width: 100%;
   overflow-x: hidden;
 }
@@ -10,7 +10,7 @@
 /* Reset EDS img override.
    EDS "main img { width: auto }" ignores the HTML width attribute.
    Images with explicit width attributes are handled via inline style in JS. */
-.diners-revo-content img {
+.dn-revo-content img {
   max-width: 100%;
   height: auto;
 }
@@ -18,25 +18,25 @@
 /* Reset EDS button styles without blocking component CSS overrides.
    Using :where() reduces specificity to (0-0-1) so component CSS
    (e.g. .cmp-accordion__button at 0-1-0) can still override. */
-:where(.diners-revo-content) button {
+:where(.dn-revo-content) button {
   all: revert;
 }
 
 /* EDS "button:hover" (0-1-0) sets background-color on all button hovers.
    Reset it here with equal specificity so component CSS can override. */
-:where(.diners-revo-content) button:hover,
-:where(.diners-revo-content) button:focus {
+:where(.dn-revo-content) button:hover,
+:where(.dn-revo-content) button:focus {
   background-color: revert;
   cursor: revert;
 }
 
 /* Reset EDS link styles with reduced specificity. */
-:where(.diners-revo-content) a:any-link {
+:where(.dn-revo-content) a:any-link {
   color: revert;
   text-decoration: revert;
 }
 
-:where(.diners-revo-content) a:hover {
+:where(.dn-revo-content) a:hover {
   color: revert;
   text-decoration: revert;
 }

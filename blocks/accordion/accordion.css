@@ -1,0 +1,45 @@
+.accordion-item {
+  border-bottom: 1px solid #dadada;
+}
+
+.accordion-item-details {
+  padding: 0;
+}
+
+.accordion-item-details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 8px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordion-item-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-item-details > summary::after {
+  content: '+';
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.accordion-item-details[open] > summary::after {
+  content: '\2212';
+}
+
+.accordion-item-body {
+  padding: 0 8px 16px;
+}
+
+.accordion-item-body p:first-child {
+  margin-top: 0;
+}
+
+.accordion-item-body p:last-child {
+  margin-bottom: 0;
+}

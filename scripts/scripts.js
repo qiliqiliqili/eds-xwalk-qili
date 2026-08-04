@@ -11,6 +11,7 @@ import {
   loadSections,
   loadCSS,
   getMetadata,
+  buildBlock,
 } from './aem.js';
 
 /**
@@ -60,12 +61,30 @@ async function loadFonts() {
 }
 
 /**
+ * Builds a hero block from a page's first heading and first picture, when the
+ * picture appears before the heading in document order. This lets an author
+ * drop a plain image + title at the top of the page without ever placing a
+ * "Hero" block themselves; the block is synthesized at render time instead.
+ * @param {Element} main The container element
+ */
+function buildHeroBlock(main) {
+  const h1 = main.querySelector('h1');
+  const picture = main.querySelector('picture');
+  // eslint-disable-next-line no-bitwise
+  if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
+    const section = document.createElement('div');
+    section.append(buildBlock('hero', { elems: [picture, h1] }));
+    main.prepend(section);
+  }
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
-function buildAutoBlocks() {
+function buildAutoBlocks(main) {
   try {
-    // TODO: add auto block, if needed
+    buildHeroBlock(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);

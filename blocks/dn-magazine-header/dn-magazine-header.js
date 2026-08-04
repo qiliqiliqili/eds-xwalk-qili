@@ -1,12 +1,12 @@
 /**
- * diners-magazine-header block
+ * dn-magazine-header block
  *
- * Renders the original Diners Club header HTML extracted from diners-revo/content.html,
+ * Renders the original Diners Club header HTML extracted from dn-revo/content.html,
  * styled with the same CSS assets. Below the header, appends the magazine category
  * sub-nav built from this block's own content.html (Section 2).
  */
 
-const REVO_PATH = '/blocks/diners-revo';
+const REVO_PATH = '/blocks/dn-revo';
 const FILES_MARKER = '_files/';
 
 function loadCSS(href) {

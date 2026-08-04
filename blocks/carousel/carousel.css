@@ -1,0 +1,75 @@
+.carousel {
+  position: relative;
+}
+
+.carousel-slide {
+  display: grid;
+  gap: 16px;
+}
+
+@media (width >= 700px) {
+  .carousel-slide {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.carousel-slide-image picture {
+  display: block;
+}
+
+.carousel-slide-image img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.carousel-nav {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.carousel-prev,
+.carousel-next {
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 80%);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.carousel-prev::before {
+  content: '\2039';
+}
+
+.carousel-next::before {
+  content: '\203a';
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #dadada;
+  cursor: pointer;
+}
+
+.carousel-dot[aria-selected="true"] {
+  background: var(--link-color, #004c97);
+}

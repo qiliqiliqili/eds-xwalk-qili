@@ -1,5 +1,5 @@
 /**
- * diners-breadcrumb block
+ * dn-breadcrumb block
  *
  * Renders a breadcrumb trail with an optional page description beneath it,
  * matching the CCM013_Breadcrumb / .dc__breadcrumb structure from the original
@@ -46,7 +46,7 @@ export default function decorate(block) {
 
   // ── Build breadcrumb nav ──────────────────────────────────────
   const nav = document.createElement('nav');
-  nav.className = 'diners-breadcrumb-nav';
+  nav.className = 'dn-breadcrumb-nav';
   nav.setAttribute('aria-label', 'パンくずリスト');
 
   const ol = document.createElement('ol');
@@ -104,7 +104,7 @@ export default function decorate(block) {
   let descEl = null;
   if (descriptionItems.length > 0) {
     descEl = document.createElement('div');
-    descEl.className = 'diners-breadcrumb-description';
+    descEl.className = 'dn-breadcrumb-description';
     descriptionItems.forEach(({ text }) => {
       const p = document.createElement('p');
       p.textContent = text;

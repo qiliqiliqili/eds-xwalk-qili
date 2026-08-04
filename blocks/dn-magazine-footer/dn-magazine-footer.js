@@ -1,11 +1,11 @@
 /**
- * diners-magazine-footer block
+ * dn-magazine-footer block
  *
- * Renders the original Diners Club footer HTML extracted from diners-revo/content.html,
- * styled with the same CSS assets from diners-revo/assets/.
+ * Renders the original Diners Club footer HTML extracted from dn-revo/content.html,
+ * styled with the same CSS assets from dn-revo/assets/.
  */
 
-const REVO_PATH = '/blocks/diners-revo';
+const REVO_PATH = '/blocks/dn-revo';
 const FILES_MARKER = '_files/';
 
 function loadCSS(href) {
